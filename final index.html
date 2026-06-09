@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>HOJAZ</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+/* ── SPLASH ── */
+#splash{
+  position:fixed;inset:0;z-index:9999;
+  background:#0a0f0d;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .6s ease, transform .6s ease;
+}
+#splash.hide{opacity:0;transform:scale(1.04);pointer-events:none}
+
+.splash-logo{
+  position:relative;
+  display:flex;flex-direction:column;align-items:center;
+}
+
+.splash-letters{
+  display:flex;gap:2px;align-items:baseline;
+  overflow:hidden;
+  direction:ltr;
+}
+.splash-letter{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:88px;
+  color:white;
+  line-height:1;
+  opacity:0;
+  transform:translateY(60px);
+  transition:opacity .4s ease, transform .4s ease;
+}
+.splash-letter.show{opacity:1;transform:translateY(0)}
+.splash-letter.h{color:white}
+.splash-letter.o{color:#52876e}
+.splash-letter.j{color:#52876e}
+.splash-letter.a{color:white}
+.splash-letter.z{color:#52876e}
+
+.splash-line{
+  width:0;height:2px;
+  background:linear-gradient(90deg,transparent,#52876e,transparent);
+  margin-top:4px;
+  transition:width .5s ease .6s;
+}
+.splash-line.grow{width:180px}
+
+.splash-tagline{
+  font-family:'Vazirmatn',sans-serif;
+  font-size:12px;font-weight:300;
+  color:rgba(255,255,255,.4);
+  letter-spacing:4px;
+  text-transform:uppercase;
+  margin-top:16px;
+  opacity:0;transition:opacity .4s ease 1s;
+}
+.splash-tagline.show{opacity:1}
+
+.splash-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#52876e;
+  margin-top:48px;
+  opacity:0;
+  animation:pulse 1s ease infinite;
+}
+@keyframes pulse{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --ink:#0a0f0d;
+  --ink2:#2a3530;
+  --ink3:#4a5e57;
+  --mist:#f2f7f4;
+  --mist2:#e4ede8;
+  --white:#ffffff;
+  --sage:#52876e;
+  --sage-dark:#2d5a45;
+  --sage-light:#8bb8a0;
+  --sage-pale:#c8e2d4;
+  --sage-glow:rgba(82,135,110,0.15);
+  --gold:#c8973a;
+  --gold-pale:#fdf3e0;
+  --red:#c0392b;
+  --red-pale:#fdecea;
+  --radius:20px;
+  --radius-sm:12px;
+}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'Vazirmatn',sans-serif;
+  background:var(--mist);
+  color:var(--ink);
+  display:flex;flex-direction:column;
+}
+
+/* ── SCREENS ── */
+.screen{
+  display:none;flex-direction:column;
+  height:100%;overflow:hidden;
+  position:absolute;inset:0;
+  background:var(--mist);
+}
+.screen.active{display:flex}
+
+/* ── NAV BAR ── */
+.nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:56px 24px 16px;
+  background:var(--white);
+  border-bottom:1px solid var(--mist2);
+  flex-shrink:0;
+}
+.nav-title{font-size:20px;font-weight:800;color:var(--ink);letter-spacing:-0.5px}
+.nav-sub{font-size:12px;color:var(--ink3);margin-top:2px;font-weight:400}
+.nav-btn{
+  width:40px;height:40px;border-radius:12px;border:none;
+  background:var(--mist);color:var(--ink);font-size:18px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.15s;
+}
+.nav-btn:active{transform:scale(.92);background:var(--mist2)}
+
+/* ── SCROLL AREA ── */
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 16px 100px}
+.scroll::-webkit-scrollbar{display:none}
+
+/* ── TODAY SCREEN ── */
+.date-strip{
+  background:var(--sage-dark);
+  border-radius:var(--radius);
+  padding:20px 24px;
+  margin-bottom:16px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.date-strip::before{
+  content:'';position:absolute;
+  top:-30px;left:-30px;
+  width:120px;height:120px;
+  border-radius:50%;
+  background:rgba(255,255,255,.05);
+}
+.date-arrow{
+  width:36px;height:36px;border-radius:10px;
+  border:none;background:rgba(255,255,255,.12);
+  color:white;font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:.15s;flex-shrink:0;
+}
+.date-arrow:active{background:rgba(255,255,255,.22)}
+.date-center{text-align:center;flex:1}
+.date-day{font-size:42px;font-weight:900;color:white;line-height:1;letter-spacing:-2px}
+.date-weekday{font-size:12px;color:rgba(255,255,255,.65);margin-top:2px}
+.date-month{font-size:15px;font-weight:700;color:rgba(255,255,255,.9);margin-top:1px}
+
+/* Progress card */
+.progress-card{
+  background:var(--white);border-radius:var(--radius);
+  padding:20px 24px;margin-bottom:16px;
+  display:flex;align-items:center;gap:20px;
+  box-shadow:0 2px 16px rgba(0,0,0,.04);
+}
+.ring-wrap{position:relative;width:80px;height:80px;flex-shrink:0}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(--mist2);stroke-width:8}
+.ring-fill{
+  fill:none;stroke:var(--sage);stroke-width:8;stroke-linecap:round;
+  stroke-dasharray:220;stroke-dashoffset:220;
+  transition:stroke-dashoffset .6s cubic-bezier(.4,0,.2,1);
+}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-pct{font-size:18px;font-weight:900;color:var(--ink);line-height:1}
+.ring-lbl{font-size:9px;color:var(--ink3);margin-top:1px}
+.progress-stats{flex:1}
+.progress-stats h3{font-size:16px;font-weight:800;color:var(--ink);margin-bottom:8px}
+.stat-row{display:flex;gap:12px}
+.stat-pill{
+  flex:1;padding:8px 10px;border-radius:10px;text-align:center;
+}
+.stat-pill.done{background:rgba(82,135,110,.1)}
+.stat-pill.fail{background:rgba(192,57,43,.08)}
+.stat-pill.left{background:var(--mist)}
+.stat-pill .sv{font-size:18px;font-weight:800}
+.stat-pill.done .sv{color:var(--sage)}
+.stat-pill.fail .sv{color:var(--red)}
+.stat-pill.left .sv{color:var(--ink3)}
+.stat-pill .sl{font-size:9px;color:var(--ink3);margin-top:1px}
+
+/* Habit cards */
+.section-label{
+  font-size:11px;font-weight:700;color:var(--ink3);
+  letter-spacing:.8px;text-transform:uppercase;
+  padding:0 4px 10px;margin-top:4px;
+}
+.habit-row{
+  background:var(--white);border-radius:16px;
+  margin-bottom:10px;
+  display:flex;align-items:center;
+  padding:14px 16px;
+  box-shadow:0 1px 8px rgba(0,0,0,.04);
+  border:1.5px solid transparent;
+  cursor:pointer;
+  user-select:none;-webkit-user-select:none;
+  transition:border-color .2s,background .2s,transform .1s;
+  position:relative;overflow:hidden;
+}
+.habit-row:active{transform:scale(.98)}
+.habit-row.done{border-color:var(--sage-pale);background:linear-gradient(135deg,#f0fff8,var(--white))}
+.habit-row.fail{border-color:#ffd5d0;background:linear-gradient(135deg,#fff5f4,var(--white))}
+.habit-emoji{font-size:26px;margin-left:14px;min-width:32px;text-align:center}
+.habit-info{flex:1;min-width:0}
+.habit-name{font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.habit-streak{font-size:11px;color:var(--ink3);margin-top:2px}
+.habit-tick{
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:800;flex-shrink:0;
+  border:2px solid var(--mist2);
+  background:var(--mist);color:var(--ink3);
+  transition:.2s;
+}
+.habit-row.done .habit-tick{background:var(--sage);border-color:var(--sage-dark);color:white;box-shadow:0 4px 12px rgba(82,135,110,.35)}
+.habit-row.fail .habit-tick{background:var(--red);border-color:#a93226;color:white;box-shadow:0 4px 12px rgba(192,57,43,.3)}
+
+/* ── MONTH SCREEN ── */
+.month-header{
+  background:var(--white);
+  padding:0 16px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.month-nav-btn{
+  width:36px;height:36px;border-radius:10px;border:1.5px solid var(--mist2);
+  background:var(--white);color:var(--ink);font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.month-name-display{font-size:18px;font-weight:800;color:var(--ink)}
+
+.cal-card{
+  background:var(--white);border-radius:var(--radius);
+  padding:16px;margin-bottom:16px;
+  box-shadow:0 2px 16px rgba(0,0,0,.04);
+}
+.cal-dow{
+  display:grid;grid-template-columns:repeat(7,1fr);
+  margin-bottom:8px;
+}
+.cal-dow span{
+  text-align:center;font-size:10px;font-weight:700;
+  color:var(--ink3);padding:4px 0;
+}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cal-cell{
+  aspect-ratio:1;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:600;color:var(--ink);
+  cursor:pointer;transition:.15s;
+  position:relative;
+}
+.cal-cell:active{transform:scale(.9)}
+.cal-cell.empty{background:transparent;cursor:default}
+.cal-cell.future{background:var(--mist);color:var(--mist2);cursor:default}
+.cal-cell.no-data{background:var(--mist);color:var(--ink3)}
+.cal-cell.low{background:#ffe5e0;color:var(--red)}
+.cal-cell.mid{background:#fff8e0;color:#b07a00}
+.cal-cell.high{background:#e0f5ea;color:var(--sage-dark)}
+.cal-cell.full{background:var(--sage);color:white}
+.cal-cell.today-cell::after{
+  content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);
+  width:4px;height:4px;border-radius:50%;background:currentColor;
+}
+
+.legend{display:flex;gap:8px;flex-wrap:wrap;padding:4px 0}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ink3)}
+.legend-dot{width:10px;height:10px;border-radius:3px}
+
+/* ── STATS SCREEN ── */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.stat-card{
+  background:var(--white);border-radius:var(--radius);padding:18px 16px;
+  box-shadow:0 2px 12px rgba(0,0,0,.04);
+}
+.stat-card .sc-val{font-size:28px;font-weight:900;color:var(--ink);letter-spacing:-1px}
+.stat-card .sc-lbl{font-size:11px;color:var(--ink3);margin-top:4px}
+.stat-card .sc-icon{font-size:20px;margin-bottom:6px}
+
+.streak-section-title{font-size:13px;font-weight:800;color:var(--ink);margin-bottom:12px}
+.streak-row{
+  background:var(--white);border-radius:14px;padding:14px 16px;
+  margin-bottom:8px;display:flex;align-items:center;gap:14px;
+  box-shadow:0 1px 8px rgba(0,0,0,.04);
+}
+.streak-emoji{font-size:22px}
+.streak-name{font-size:14px;font-weight:600;flex:1;color:var(--ink)}
+.streak-badge{
+  background:var(--gold-pale);color:var(--gold);
+  font-size:14px;font-weight:900;
+  padding:4px 10px;border-radius:8px;
+}
+.streak-badge span{font-size:10px;font-weight:400;color:var(--ink3)}
+
+/* ── SETTINGS SCREEN ── */
+.settings-section{margin-bottom:24px}
+.settings-section-title{
+  font-size:11px;font-weight:700;color:var(--ink3);
+  letter-spacing:.8px;text-transform:uppercase;
+  padding:0 4px 10px;
+}
+.habit-setting-row{
+  background:var(--white);border-radius:14px;padding:14px 16px;
+  margin-bottom:8px;display:flex;align-items:center;gap:12px;
+  box-shadow:0 1px 8px rgba(0,0,0,.04);
+}
+.habit-setting-emoji{font-size:22px;min-width:28px}
+.habit-setting-name{font-size:14px;font-weight:600;flex:1;color:var(--ink)}
+.del-btn{
+  width:32px;height:32px;border-radius:8px;border:none;
+  background:var(--red-pale);color:var(--red);font-size:16px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.15s;
+}
+.del-btn:active{transform:scale(.88)}
+
+/* Add habit form */
+.add-form{
+  background:var(--white);border-radius:var(--radius);padding:20px;
+  box-shadow:0 2px 16px rgba(0,0,0,.04);
+  margin-bottom:16px;
+}
+.add-form h3{font-size:15px;font-weight:800;color:var(--ink);margin-bottom:14px}
+.form-row{display:flex;gap:10px;align-items:flex-end}
+.emoji-pick{
+  width:52px;height:52px;border-radius:12px;border:2px solid var(--mist2);
+  background:var(--mist);font-size:24px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.text-input{
+  flex:1;height:52px;border-radius:12px;border:2px solid var(--mist2);
+  background:var(--mist);padding:0 14px;
+  font-size:14px;font-family:'Vazirmatn',sans-serif;
+  color:var(--ink);outline:none;direction:rtl;
+  transition:.2s;
+}
+.text-input:focus{border-color:var(--sage);background:var(--white)}
+.add-btn{
+  height:52px;padding:0 18px;border-radius:12px;border:none;
+  background:var(--sage-dark);color:white;
+  font-size:14px;font-weight:700;font-family:'Vazirmatn',sans-serif;
+  cursor:pointer;flex-shrink:0;transition:.15s;
+  display:flex;align-items:center;gap:6px;
+}
+.add-btn:active{transform:scale(.95);background:var(--sage)}
+
+/* Emoji picker popup */
+.emoji-popup{
+  position:fixed;inset:0;z-index:200;
+  display:none;align-items:flex-end;
+  background:rgba(0,0,0,.4);
+  backdrop-filter:blur(4px);
+}
+.emoji-popup.open{display:flex}
+.emoji-sheet{
+  background:var(--white);width:100%;
+  border-radius:24px 24px 0 0;
+  padding:20px 16px 40px;
+  max-height:65vh;overflow-y:auto;
+}
+.emoji-sheet h3{font-size:16px;font-weight:800;color:var(--ink);margin-bottom:16px;text-align:center}
+.emoji-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.emoji-option{
+  aspect-ratio:1;border-radius:12px;border:none;
+  background:var(--mist);font-size:24px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:.15s;
+}
+.emoji-option:active{transform:scale(.85);background:var(--mist2)}
+
+/* ── BOTTOM TAB BAR ── */
+.tabbar{
+  display:flex;
+  background:rgba(255,255,255,.95);
+  backdrop-filter:blur(20px);
+  border-top:1px solid var(--mist2);
+  padding:8px 0 28px;
+  flex-shrink:0;
+  position:relative;z-index:100;
+}
+.tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  gap:3px;cursor:pointer;padding:4px;transition:.15s;
+}
+.tab:active{transform:scale(.88)}
+.tab-icon{font-size:22px;transition:.2s}
+.tab-lbl{font-size:10px;color:var(--ink3);font-weight:500;transition:.2s}
+.tab.active .tab-lbl{color:var(--sage-dark);font-weight:700}
+
+/* ── ANIMATIONS ── */
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+.pop{animation:pop .2s ease-out}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.habit-row{animation:slideUp .3s ease-out both}
+
+/* ── EMPTY STATE ── */
+.empty-state{
+  text-align:center;padding:40px 20px;
+  color:var(--ink3);
+}
+.empty-state .es-icon{font-size:48px;margin-bottom:12px}
+.empty-state p{font-size:14px;line-height:1.6}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--ink);color:white;
+  padding:10px 20px;border-radius:100px;
+  font-size:13px;font-weight:600;
+  opacity:0;transition:.3s;z-index:300;
+  white-space:nowrap;pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-logo">
+    <div class="splash-letters">
+      <span class="splash-letter h" data-i="0">H</span>
+      <span class="splash-letter o" data-i="1">O</span>
+      <span class="splash-letter j" data-i="2">J</span>
+      <span class="splash-letter a" data-i="3">A</span>
+      <span class="splash-letter z" data-i="4">Z</span>
+    </div>
+    <div class="splash-line" id="splash-line"></div>
+    <div class="splash-tagline" id="splash-tagline">habit tracker</div>
+    <div class="splash-dot" id="splash-dot" style="display:none"></div>
+  </div>
+</div>
+
+<!-- TODAY -->
+<div class="screen active" id="screen-today">
+  <div class="nav">
+    <div>
+      <div class="nav-title">Momentum</div>
+      <div class="nav-sub" id="today-nav-sub">عادت‌های امروز</div>
+    </div>
+  </div>
+  <div class="scroll" id="today-scroll">
+    <div class="date-strip">
+      <button class="date-arrow" onclick="changeDay(-1)">›</button>
+      <div class="date-center">
+        <div class="date-day" id="hd-day">—</div>
+        <div class="date-weekday" id="hd-weekday">—</div>
+        <div class="date-month" id="hd-month">—</div>
+      </div>
+      <button class="date-arrow" onclick="changeDay(1)">‹</button>
+    </div>
+    <div class="progress-card">
+      <div class="ring-wrap">
+        <svg viewBox="0 0 80 80" width="80" height="80">
+          <circle class="ring-bg" cx="40" cy="40" r="34"/>
+          <circle class="ring-fill" id="ring-fill" cx="40" cy="40" r="34"/>
+        </svg>
+        <div class="ring-center">
+          <span class="ring-pct" id="ring-pct">0%</span>
+          <span class="ring-lbl">امروز</span>
+        </div>
+      </div>
+      <div class="progress-stats">
+        <h3>پیشرفت روزانه</h3>
+        <div class="stat-row">
+          <div class="stat-pill done"><div class="sv" id="cnt-done">0</div><div class="sl">انجام شد</div></div>
+          <div class="stat-pill fail"><div class="sv" id="cnt-fail">0</div><div class="sl">نشد</div></div>
+          <div class="stat-pill left"><div class="sv" id="cnt-left">0</div><div class="sl">باقی</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-label">عادت‌ها</div>
+    <div id="habit-list"></div>
+  </div>
+</div>
+
+<!-- MONTH -->
+<div class="screen" id="screen-month">
+  <div class="nav">
+    <div>
+      <div class="nav-title" id="month-nav-title">—</div>
+      <div class="nav-sub">نمای ماهانه</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="nav-btn" onclick="changeViewMonth(-1)">›</button>
+      <button class="nav-btn" onclick="changeViewMonth(1)">‹</button>
+    </div>
+  </div>
+  <div class="scroll">
+    <div class="cal-card">
+      <div class="cal-dow">
+        <span>ش</span><span>ی</span><span>د</span><span>س</span><span>چ</span><span>پ</span><span>ج</span>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+    <div class="cal-card">
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--sage)"></div> عالی +۸۰٪</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#e0f5ea"></div> خوب ۵۰٪+</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#fff8e0"></div> ضعیف ۳۰٪+</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ffe5e0"></div> کم &lt;۳۰٪</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--mist)"></div> ثبت نشده</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="screen" id="screen-stats">
+  <div class="nav">
+    <div>
+      <div class="nav-title">آمار</div>
+      <div class="nav-sub">عملکرد کلی</div>
+    </div>
+  </div>
+  <div class="scroll">
+    <div class="stats-grid" id="stats-grid"></div>
+    <div class="streak-section-title">🔥 استریک فعلی</div>
+    <div id="streak-list"></div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="screen" id="screen-settings">
+  <div class="nav">
+    <div>
+      <div class="nav-title">تنظیمات</div>
+      <div class="nav-sub">مدیریت عادت‌ها</div>
+    </div>
+  </div>
+  <div class="scroll">
+    <div class="settings-section">
+      <div class="settings-section-title">افزودن عادت جدید</div>
+      <div class="add-form">
+        <div class="form-row">
+          <button class="emoji-pick" id="emoji-pick-btn" onclick="openEmojiPicker()">⭐</button>
+          <input class="text-input" id="new-habit-name" placeholder="نام عادت..." type="text" maxlength="30">
+          <button class="add-btn" onclick="addHabit()">
+            <span>+</span> افزودن
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-section-title">عادت‌های فعلی</div>
+      <div id="settings-habit-list"></div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-section-title">⚠️ خطرناک</div>
+      <div style="background:var(--white);border-radius:14px;padding:16px;box-shadow:0 1px 8px rgba(0,0,0,.04)">
+        <p style="font-size:13px;color:var(--ink3);margin-bottom:12px;line-height:1.6">حذف تمام داده‌ها و شروع از صفر</p>
+        <button onclick="resetAll()" style="background:var(--red-pale);color:var(--red);border:none;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:700;font-family:'Vazirmatn',sans-serif;cursor:pointer">🗑 پاک کردن همه چیز</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EMOJI PICKER -->
+<div class="emoji-popup" id="emoji-popup" onclick="closeEmojiPicker(event)">
+  <div class="emoji-sheet">
+    <h3>انتخاب آیکون</h3>
+    <div class="emoji-grid" id="emoji-grid"></div>
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tabbar">
+  <div class="tab active" id="tab-today" onclick="switchScreen('today')">
+    <span class="tab-icon">☀️</span>
+    <span class="tab-lbl">امروز</span>
+  </div>
+  <div class="tab" id="tab-month" onclick="switchScreen('month')">
+    <span class="tab-icon">📅</span>
+    <span class="tab-lbl">ماه</span>
+  </div>
+  <div class="tab" id="tab-stats" onclick="switchScreen('stats')">
+    <span class="tab-icon">📊</span>
+    <span class="tab-lbl">آمار</span>
+  </div>
+  <div class="tab" id="tab-settings" onclick="switchScreen('settings')">
+    <span class="tab-icon">⚙️</span>
+    <span class="tab-lbl">تنظیمات</span>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DEFAULT HABITS ──────────────────────────────────────────────
+const DEFAULT_HABITS = [
+  {id:'sleep',  emoji:'😴', name:'۸ ساعت خواب'},
+  {id:'water',  emoji:'💧', name:'۸ لیوان آب'},
+  {id:'shower', emoji:'🚿', name:'دوش آب سرد'},
+  {id:'sport',  emoji:'🏃', name:'ورزش'},
+  {id:'read',   emoji:'📚', name:'مطالعه کتاب'},
+  {id:'work',   emoji:'💼', name:'کار کردن'},
+  {id:'plan',   emoji:'📋', name:'برنامه‌ریزی'},
+  {id:'nomob',  emoji:'📵', name:'بدون موبایل اول صبح'},
+  {id:'med',    emoji:'🧘', name:'مدیتیشن ۱۰ دقیقه'},
+  {id:'nosugar',emoji:'🚫', name:'بدون شکر/فست‌فود'},
+  {id:'task',   emoji:'✅', name:'یه کار مهم رو تموم کن'},
+  {id:'gratit', emoji:'🙏', name:'قدردانی روزانه'},
+  {id:'nosmoke',emoji:'🚭', name:'سیگار نکشیدن'},
+];
+
+const EMOJIS = ['😴','💧','🚿','🏃','📚','💼','📋','📵','🧘','🚫','✅','🙏','🚭','🍎','🥗','🏋️','🧘','🎯','💪','🌙','☀️','🎨','🎵','💰','📝','🧹','🤝','❤️','🌿','⚡','🔥','💎','🌟','🎉','🏆','🦷','💊','🚶','🧠','📱','🖥','✍️','🎤','🎸','🏊','🚴','🧗','🤸','⚽','🏀'];
+
+const MONTHS_FA = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+const DAYS_FA = ['یک‌شنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنج‌شنبه','جمعه','شنبه'];
+
+// ── STATE ───────────────────────────────────────────────────────
+let currentDate = new Date(); currentDate.setHours(0,0,0,0);
+let viewMonthDate = new Date(); viewMonthDate.setHours(0,0,0,0);
+let selectedEmoji = '⭐';
+let currentScreen = 'today';
+
+// ── STORAGE ─────────────────────────────────────────────────────
+function load(key, def) { try { return JSON.parse(localStorage.getItem(key)) || def; } catch(e){ return def; } }
+function save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+function getHabits() { return load('habits_list', DEFAULT_HABITS); }
+function getData() { return load('habits_data', {}); }
+function saveData(d) { save('habits_data', d); }
+
+// ── DATE UTILS ──────────────────────────────────────────────────
+function getJalali(date) {
+  try {
+    const parts = new Intl.DateTimeFormat('fa-IR', {
+      calendar:'persian', year:'numeric', month:'numeric', day:'numeric', numberingSystem:'latn'
+    }).formatToParts(date);
+    const g = t => parseInt(parts.find(p=>p.type===t).value);
+    return {y:g('year'), m:g('month')-1, d:g('day')};
+  } catch(e) {
+    return {y:date.getFullYear()-621, m:date.getMonth(), d:date.getDate()};
+  }
+}
+
+function toGregorian(jy, jm, jd) {
+  let guess = new Date(jy+621, jm, jd);
+  for(let i=0;i<60;i++){
+    const j = getJalali(guess);
+    const diff = (jy-j.y)*365+(jm-j.m)*30+(jd-j.d);
+    if(diff===0 && j.y===jy && j.m===jm && j.d===jd) return guess;
+    if(diff===0) return guess;
+    guess = new Date(guess.getTime()+diff*86400000);
+  }
+  return guess;
+}
+
+function jalaliDaysInMonth(jy,jm){
+  if(jm<6) return 31;
+  if(jm<11) return 30;
+  const leaps=[1,5,9,13,17,22,26,30];
+  return leaps.includes(((jy-474)%2820+474)%2820%128) ? 30:29;
+}
+
+function dateKey(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+
+// ── TODAY ───────────────────────────────────────────────────────
+function renderToday() {
+  const habits = getHabits();
+  const data = getData();
+  const key = dateKey(currentDate);
+  const dayData = data[key] || {};
+  const jal = getJalali(currentDate);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const isToday = currentDate.getTime()===today.getTime();
+
+  document.getElementById('hd-day').textContent = jal.d;
+  document.getElementById('hd-weekday').textContent = DAYS_FA[currentDate.getDay()];
+  document.getElementById('hd-month').textContent = `${MONTHS_FA[jal.m]} ${jal.y}`;
+  document.getElementById('today-nav-sub').textContent = isToday ? 'امروز' : `${jal.d} ${MONTHS_FA[jal.m]}`;
+
+  let done=0, fail=0;
+  habits.forEach(h=>{ if(dayData[h.id]===1)done++; else if(dayData[h.id]===2)fail++; });
+  const left = habits.length-done-fail;
+  const pct = habits.length ? Math.round(done/habits.length*100) : 0;
+
+  document.getElementById('cnt-done').textContent = done;
+  document.getElementById('cnt-fail').textContent = fail;
+  document.getElementById('cnt-left').textContent = left;
+  document.getElementById('ring-pct').textContent = pct+'%';
+
+  const circ = 213.6;
+  const offset = circ - pct/100*circ;
+  const ring = document.getElementById('ring-fill');
+  ring.style.strokeDashoffset = offset;
+  ring.style.stroke = pct>=80?'#2d5a45':pct>=50?'#52876e':'#8bb8a0';
+
+  const list = document.getElementById('habit-list');
+  if(!habits.length){
+    list.innerHTML = '<div class="empty-state"><div class="es-icon">🌱</div><p>هنوز عادتی نداری!<br>از تنظیمات اضافه کن</p></div>';
+    return;
+  }
+  list.innerHTML = '';
+  habits.forEach((h,i)=>{
+    const state = dayData[h.id]||0;
+    const cls = state===1?'done':state===2?'fail':'';
+    const icon = state===1?'✓':state===2?'✗':'○';
+    let streak=0;
+    let d2=new Date(currentDate); d2.setDate(d2.getDate()-1);
+    const d3=getData();
+    while(true){const dk=dateKey(d2);if(d3[dk]&&d3[dk][h.id]===1){streak++;d2.setDate(d2.getDate()-1);}else break;}
+    const row = document.createElement('div');
+    row.className=`habit-row ${cls}`;
+    row.id=`hr-${h.id}`;
+    row.style.animationDelay=(i*.04)+'s';
+    row.innerHTML=`
+      <span class="habit-emoji">${h.emoji}</span>
+      <div class="habit-info">
+        <div class="habit-name">${h.name}</div>
+        <div class="habit-streak">${streak>0?`🔥 ${streak} روز متوالی`:'شروع کن!'}</div>
+      </div>
+      <div class="habit-tick">${icon}</div>`;
+    row.onclick=()=>cycleHabit(h.id);
+    list.appendChild(row);
+  });
+}
+
+function cycleHabit(id){
+  const data=getData();
+  const key=dateKey(currentDate);
+  if(!data[key])data[key]={};
+  const cur=data[key][id]||0;
+  data[key][id]=cur===0?1:cur===1?2:0;
+  saveData(data);
+  renderToday();
+  const row=document.getElementById('hr-'+id);
+  if(row){row.classList.remove('pop');void row.offsetWidth;row.classList.add('pop');}
+}
+
+function changeDay(d){
+  currentDate.setDate(currentDate.getDate()+d);
+  renderToday();
+}
+
+// ── MONTH ───────────────────────────────────────────────────────
+function renderMonth(){
+  const data=getData();
+  const jal=getJalali(viewMonthDate);
+  const jYear=jal.y, jMonth=jal.m;
+  document.getElementById('month-nav-title').textContent=`${MONTHS_FA[jMonth]} ${jYear}`;
+
+  const daysInMonth=jalaliDaysInMonth(jYear,jMonth);
+  const firstDay=toGregorian(jYear,jMonth,1);
+  const jsDay=firstDay.getDay();
+  const iranFirst=(jsDay+1)%7;
+  const today=new Date(); today.setHours(0,0,0,0);
+  const todayJal=getJalali(today);
+
+  const grid=document.getElementById('cal-grid');
+  grid.innerHTML='';
+  for(let i=0;i<iranFirst;i++){const c=document.createElement('div');c.className='cal-cell empty';grid.appendChild(c);}
+  for(let d=1;d<=daysInMonth;d++){
+    const gDate=toGregorian(jYear,jMonth,d);
+    const key=dateKey(gDate);
+    const dayData=data[key]||{};
+    const habits=getHabits();
+    let done=0; habits.forEach(h=>{if(dayData[h.id]===1)done++;});
+    const pct=habits.length?done/habits.length:0;
+    const isFuture=gDate>today;
+    const isToday=todayJal.y===jYear&&todayJal.m===jMonth&&todayJal.d===d;
+    const hasData=Object.keys(dayData).length>0;
+    const cell=document.createElement('div');
+    cell.className='cal-cell';
+    cell.textContent=d;
+    if(isFuture)cell.className+=' future';
+    else if(!hasData)cell.className+=' no-data';
+    else if(pct>=.8)cell.className+=' full';
+    else if(pct>=.5)cell.className+=' high';
+    else if(pct>=.3)cell.className+=' mid';
+    else cell.className+=' low';
+    if(isToday)cell.className+=' today-cell';
+    cell.onclick=()=>{if(!isFuture){currentDate=gDate;switchScreen('today');}};
+    grid.appendChild(cell);
+  }
+}
+
+function changeViewMonth(d){
+  const jal=getJalali(viewMonthDate);
+  let m=jal.m+d, y=jal.y;
+  if(m<0){m=11;y--;}else if(m>11){m=0;y++;}
+  viewMonthDate=toGregorian(y,m,1);
+  renderMonth();
+}
+
+// ── STATS ───────────────────────────────────────────────────────
+function renderStats(){
+  const data=getData();
+  const habits=getHabits();
+  const keys=Object.keys(data).sort();
+  let totalDays=0,totalDone=0,perfect=0;
+  keys.forEach(k=>{
+    const dd=data[k];
+    let d=0;
+    habits.forEach(h=>{if(dd[h.id]===1)d++;});
+    if(Object.keys(dd).length>0){totalDays++;totalDone+=d;if(d===habits.length&&habits.length>0)perfect++;}
+  });
+  const avg=totalDays&&habits.length?Math.round(totalDone/(totalDays*habits.length)*100):0;
+  const grid=document.getElementById('stats-grid');
+  grid.innerHTML='';
+  [{icon:'📅',val:totalDays+' روز',lbl:'روزهای ثبت‌شده'},{icon:'📈',val:avg+'%',lbl:'میانگین کل'},{icon:'💯',val:perfect+' روز',lbl:'روزهای کامل'},{icon:'🌱',val:habits.length+'',lbl:'تعداد عادت‌ها'}].forEach(s=>{
+    const c=document.createElement('div');
+    c.className='stat-card';
+    c.innerHTML=`<div class="sc-icon">${s.icon}</div><div class="sc-val">${s.val}</div><div class="sc-lbl">${s.lbl}</div>`;
+    grid.appendChild(c);
+  });
+  const sl=document.getElementById('streak-list');
+  sl.innerHTML='';
+  const today=new Date();today.setHours(0,0,0,0);
+  habits.map(h=>{
+    let streak=0,d2=new Date(today);
+    while(true){const dk=dateKey(d2);if(data[dk]&&data[dk][h.id]===1){streak++;d2.setDate(d2.getDate()-1);}else break;}
+    return {...h,streak};
+  }).sort((a,b)=>b.streak-a.streak).forEach(h=>{
+    const row=document.createElement('div');
+    row.className='streak-row';
+    row.innerHTML=`<span class="streak-emoji">${h.emoji}</span><span class="streak-name">${h.name}</span><div class="streak-badge">${h.streak}<span> روز</span></div>`;
+    sl.appendChild(row);
+  });
+}
+
+// ── SETTINGS ───────────────────────────────────────────────────
+function renderSettings(){
+  const habits=getHabits();
+  const list=document.getElementById('settings-habit-list');
+  list.innerHTML='';
+  if(!habits.length){
+    list.innerHTML='<div class="empty-state"><div class="es-icon">🌱</div><p>عادتی نداری، اضافه کن!</p></div>';
+    return;
+  }
+  habits.forEach((h,i)=>{
+    const row=document.createElement('div');
+    row.className='habit-setting-row';
+    row.innerHTML=`
+      <span class="habit-setting-emoji">${h.emoji}</span>
+      <span class="habit-setting-name">${h.name}</span>
+      <button class="del-btn" onclick="deleteHabit('${h.id}')">✕</button>`;
+    list.appendChild(row);
+  });
+}
+
+function addHabit(){
+  const name=document.getElementById('new-habit-name').value.trim();
+  if(!name){showToast('نام عادت رو بنویس!');return;}
+  const habits=getHabits();
+  const id='h'+Date.now();
+  habits.push({id,emoji:selectedEmoji,name});
+  save('habits_list',habits);
+  document.getElementById('new-habit-name').value='';
+  selectedEmoji='⭐';
+  document.getElementById('emoji-pick-btn').textContent='⭐';
+  renderSettings();
+  showToast('عادت اضافه شد ✓');
+}
+
+function deleteHabit(id){
+  const habits=getHabits().filter(h=>h.id!==id);
+  save('habits_list',habits);
+  renderSettings();
+  showToast('عادت حذف شد');
+}
+
+function resetAll(){
+  if(confirm('مطمئنی؟ همه داده‌ها پاک میشن!')){
+    localStorage.clear();
+    location.reload();
+  }
+}
+
+// ── EMOJI PICKER ───────────────────────────────────────────────
+function openEmojiPicker(){
+  const grid=document.getElementById('emoji-grid');
+  grid.innerHTML='';
+  EMOJIS.forEach(e=>{
+    const btn=document.createElement('button');
+    btn.className='emoji-option';btn.textContent=e;
+    btn.onclick=()=>{selectedEmoji=e;document.getElementById('emoji-pick-btn').textContent=e;closeEmojiPicker();};
+    grid.appendChild(btn);
+  });
+  document.getElementById('emoji-popup').classList.add('open');
+}
+function closeEmojiPicker(e){
+  if(!e||e.target===document.getElementById('emoji-popup'))
+    document.getElementById('emoji-popup').classList.remove('open');
+}
+
+// ── NAVIGATION ─────────────────────────────────────────────────
+function switchScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  currentScreen=name;
+  if(name==='today')renderToday();
+  else if(name==='month'){viewMonthDate=new Date(currentDate);renderMonth();}
+  else if(name==='stats')renderStats();
+  else if(name==='settings')renderSettings();
+}
+
+// ── TOAST ──────────────────────────────────────────────────────
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// ── SPLASH ─────────────────────────────────────────────────────
+(function(){
+  const letters = document.querySelectorAll('.splash-letter');
+  const line = document.getElementById('splash-line');
+  const tagline = document.getElementById('splash-tagline');
+  const dot = document.getElementById('splash-dot');
+
+  // staggered letters
+  letters.forEach((l,i)=>{
+    setTimeout(()=>l.classList.add('show'), 100+i*80);
+  });
+  // underline
+  setTimeout(()=>line.classList.add('grow'), 550);
+  // tagline
+  setTimeout(()=>tagline.classList.add('show'), 900);
+  // loading dot
+  setTimeout(()=>{dot.style.display='block';}, 1000);
+  // hide splash
+  setTimeout(()=>{
+    document.getElementById('splash').classList.add('hide');
+    setTimeout(()=>document.getElementById('splash').remove(), 700);
+  }, 2200);
+})();
+
+// ── INIT ───────────────────────────────────────────────────────
+renderToday();
+</script>
+</body>
+</html>
