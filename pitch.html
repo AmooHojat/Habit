@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IdeaBazar</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#000;--bg1:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;
+  --border:#1e1e1e;--border2:#2a2a2a;
+  --text:#ededed;--text2:#888;--text3:#444;
+  --white:#fff;--gold:#d4a843;--gold2:#f0c060;
+  --green:#22c55e;--blue:#3b82f6;--red:#ef4444;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Vazirmatn','Inter',sans-serif;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.en{font-family:'Inter',sans-serif;direction:ltr;display:inline-block}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes gradMove{to{background-position:300% center}}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(-20px,20px)}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(0,0,0,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-size:15px;font-weight:700;color:var(--white);cursor:pointer;display:flex;align-items:center;gap:8px}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold)}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-btn{font-family:inherit;font-size:13px;font-weight:500;color:var(--text2);background:none;border:none;padding:6px 12px;cursor:pointer;border-radius:6px;transition:all .2s}
+.nav-btn:hover{color:var(--text);background:var(--bg3)}
+.nav-btn.active{color:var(--white)}
+.lang-btn{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:var(--text3);background:none;border:1px solid var(--border2);padding:5px 10px;border-radius:6px;cursor:pointer;transition:all .2s;letter-spacing:.05em}
+.lang-btn:hover{color:var(--text);border-color:var(--text3)}
+
+/* PAGES */
+.page{display:none;min-height:100vh;padding-top:56px}
+.page.active{display:block}
+
+/* ══ SPLIT SCREEN ══ */
+#page-split{background:var(--bg)}
+.split-hero{min-height:calc(100vh - 56px);display:flex;align-items:stretch}
+.split-side{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 48px;position:relative;overflow:hidden;cursor:pointer;transition:flex .5s ease}
+.split-side:hover{flex:1.15}
+.split-divider{width:1px;background:var(--border);flex-shrink:0;position:relative}
+.split-divider::after{content:'یا';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg);color:var(--text3);font-size:11px;font-weight:700;padding:8px 0;letter-spacing:.1em}
+
+.split-side-glow{position:absolute;width:400px;height:400px;border-radius:50%;filter:blur(80px);pointer-events:none;opacity:.12;transition:opacity .4s}
+.split-side:hover .split-side-glow{opacity:.2}
+.glow-gold{background:var(--gold)}
+.glow-blue{background:var(--blue)}
+
+.split-icon{font-size:48px;margin-bottom:24px;position:relative}
+.split-tag{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);margin-bottom:16px;position:relative}
+.split-title{font-size:clamp(28px,3.5vw,44px);font-weight:900;line-height:1.05;letter-spacing:-.03em;margin-bottom:16px;position:relative;text-align:center}
+.split-title .grad{background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.split-title .grad-blue{background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.split-sub{font-size:14px;color:var(--text2);text-align:center;line-height:1.7;max-width:320px;margin-bottom:32px;position:relative}
+.split-btn{font-family:inherit;font-size:13px;font-weight:700;padding:12px 28px;border:none;cursor:pointer;transition:all .25s;position:relative;letter-spacing:.02em}
+.btn-gold{background:var(--gold);color:#000}
+.btn-gold:hover{background:var(--gold2);transform:translateY(-1px);box-shadow:0 8px 24px rgba(212,168,67,.3)}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-blue:hover{background:#60a5fa;transform:translateY(-1px);box-shadow:0 8px 24px rgba(59,130,246,.3)}
+.split-features{display:flex;flex-direction:column;gap:8px;margin-top:16px;position:relative}
+.split-feat{font-size:12px;color:var(--text3);display:flex;align-items:center;gap:8px}
+.split-feat::before{content:'✓';color:var(--green);font-weight:700;font-size:11px}
+
+/* ══ BRAND PAGE ══ */
+#page-brand{background:var(--bg)}
+
+/* TICKER */
+.ticker-wrap{overflow:hidden;border-bottom:1px solid var(--border);background:var(--bg1);padding:12px 0}
+.ticker-track{display:flex;gap:0;animation:ticker 20s linear infinite;width:max-content}
+.ticker-track:hover{animation-play-state:paused}
+.ticker-item{display:flex;align-items:center;gap:10px;padding:0 28px;white-space:nowrap;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)}
+.ticker-item span{color:var(--gold);font-size:13px;font-weight:900}
+
+/* BRAND HERO */
+.brand-hero{padding:80px 32px 60px;text-align:center;position:relative;overflow:hidden;max-width:900px;margin:0 auto}
+.brand-eyebrow{font-size:10px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--text3);margin-bottom:24px;display:flex;align-items:center;justify-content:center;gap:12px}
+.brand-eyebrow::before,.brand-eyebrow::after{content:'';width:32px;height:1px;background:var(--border2)}
+.brand-h{font-size:clamp(40px,6vw,72px);font-weight:900;line-height:.95;letter-spacing:-.04em;margin-bottom:20px}
+.brand-h .gold{background:linear-gradient(135deg,var(--gold),var(--gold2),var(--white));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradMove 4s linear infinite}
+.brand-sub{font-size:16px;color:var(--text2);max-width:500px;margin:0 auto 48px;line-height:1.75}
+
+/* STATS */
+.brand-stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);background:var(--bg1);margin:0 32px 80px;position:relative}
+.brand-stats::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5}
+.bstat{padding:28px 24px;border-right:1px solid var(--border);text-align:center}
+.bstat:last-child{border-right:none}
+.bstat-n{font-size:clamp(24px,3vw,38px);font-weight:900;color:var(--gold);line-height:1;margin-bottom:6px;letter-spacing:-.02em}
+.bstat-l{font-size:11px;color:var(--text3);letter-spacing:.05em;line-height:1.4}
+
+/* CASE STUDIES */
+.cases-section{max-width:1100px;margin:0 auto;padding:0 32px 80px}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--text3);margin-bottom:48px;display:flex;align-items:center;gap:12px}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.cases-list{display:flex;flex-direction:column;gap:1px;background:var(--border)}
+.case-row{background:var(--bg1);display:grid;grid-template-columns:200px 1fr auto;gap:0;transition:background .25s;cursor:default}
+.case-row:hover{background:var(--bg2)}
+.case-brand-col{padding:28px 28px;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center}
+.case-brand-name{font-size:15px;font-weight:800;color:var(--white);margin-bottom:4px}
+.case-brand-year{font-size:11px;color:var(--text3);font-family:'Inter',sans-serif}
+.case-body-col{padding:28px 32px;border-right:1px solid var(--border)}
+.case-campaign{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.case-result{font-size:14px;font-weight:600;color:var(--white);margin-bottom:6px;line-height:1.4}
+.case-detail{font-size:12px;color:var(--text2);line-height:1.6}
+.case-metric-col{padding:28px 28px;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;min-width:160px}
+.case-num{font-size:clamp(22px,2.5vw,32px);font-weight:900;color:var(--gold);line-height:1;margin-bottom:4px;letter-spacing:-.02em;text-align:left}
+.case-num-label{font-size:10px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;text-align:left}
+.source-badge{font-size:9px;color:var(--text3);margin-top:8px;font-family:'Inter',sans-serif;letter-spacing:.05em}
+
+/* CTA SECTION */
+.brand-cta{padding:80px 32px;text-align:center;border-top:1px solid var(--border);background:var(--bg1);position:relative;overflow:hidden}
+.cta-glow{position:absolute;width:600px;height:300px;background:radial-gradient(ellipse,rgba(212,168,67,.07) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.brand-cta h2{font-size:clamp(28px,4vw,48px);font-weight:900;letter-spacing:-.03em;margin-bottom:12px;position:relative}
+.brand-cta p{font-size:15px;color:var(--text2);margin-bottom:40px;line-height:1.7;position:relative}
+.cta-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative}
+.btn-primary{font-family:inherit;font-size:14px;font-weight:700;background:var(--white);color:var(--bg);border:none;padding:13px 32px;cursor:pointer;transition:all .2s}
+.btn-primary:hover{opacity:.85;transform:translateY(-1px)}
+.btn-outline{font-family:inherit;font-size:14px;font-weight:500;background:none;color:var(--text2);border:1px solid var(--border2);padding:13px 32px;cursor:pointer;transition:all .2s}
+.btn-outline:hover{color:var(--text);border-color:var(--text3)}
+
+/* MID CTA */
+.mid-cta{margin:0 32px 80px;background:var(--bg1);border:1px solid var(--border);padding:40px 40px;display:flex;align-items:center;justify-content:space-between;gap:24px;position:relative;overflow:hidden}
+.mid-cta::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.4}
+.mid-cta-text h3{font-size:20px;font-weight:800;margin-bottom:6px;letter-spacing:-.01em}
+.mid-cta-text p{font-size:13px;color:var(--text2);line-height:1.6}
+.mid-cta-badge{background:var(--gold);color:#000;font-size:12px;font-weight:800;padding:12px 24px;white-space:nowrap;cursor:pointer;transition:all .2s;flex-shrink:0;font-family:inherit}
+.mid-cta-badge:hover{background:var(--gold2);transform:translateY(-1px)}
+
+/* REGISTER FORM */
+.reg-wrap{max-width:680px;margin:0 auto;padding:40px 32px 80px}
+.reg-title{font-size:24px;font-weight:800;margin-bottom:4px;letter-spacing:-.01em}
+.reg-sub{font-size:14px;color:var(--text2);margin-bottom:32px}
+.steps-nav{display:flex;border-bottom:1px solid var(--border);margin-bottom:36px;gap:0}
+.step-tab{font-size:12px;font-weight:600;color:var(--text3);padding:0 0 14px;margin-left:28px;border-bottom:2px solid transparent;cursor:default;display:flex;align-items:center;gap:7px;white-space:nowrap;transition:all .2s}
+.step-tab.active{color:var(--white);border-bottom-color:var(--white)}
+.step-tab.done{color:var(--green)}
+.step-num{width:18px;height:18px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text3);flex-shrink:0;transition:all .2s}
+.step-tab.active .step-num{border-color:var(--white);background:var(--white);color:var(--bg)}
+.step-tab.done .step-num{border-color:var(--green);background:var(--green);color:#fff}
+.form-step{display:none}.form-step.active{display:block;animation:fadeUp .3s ease}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:7px;letter-spacing:.03em}
+.field label span{color:var(--red);margin-right:2px}
+.field input,.field textarea,.field select{width:100%;background:var(--bg1);border:1px solid var(--border2);color:var(--white);font-family:inherit;font-size:14px;padding:10px 13px;outline:none;transition:border-color .2s;appearance:none;border-radius:0}
+.field input::placeholder,.field textarea::placeholder{color:var(--text3)}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--text3)}
+.field textarea{resize:vertical;min-height:96px;line-height:1.6}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field-hint{font-size:11px;color:var(--text3);margin-top:5px}
+.prize-opts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:7px}
+.prize-opt{border:1px solid var(--border2);background:var(--bg1);padding:11px 8px;text-align:center;cursor:pointer;transition:all .2s;border-radius:0}
+.prize-opt:hover{border-color:var(--text3)}
+.prize-opt.sel{border-color:var(--gold);background:rgba(212,168,67,.06)}
+.prize-n{font-size:15px;font-weight:800;color:var(--white);margin-bottom:2px}
+.prize-l{font-size:10px;color:var(--text3)}
+.type-opts{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}
+.type-opt{border:1px solid var(--border2);background:var(--bg1);padding:7px 13px;cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);transition:all .2s;border-radius:0}
+.type-opt:hover{color:var(--text);border-color:var(--text3)}
+.type-opt.sel{border-color:var(--white);color:var(--white);background:var(--bg3)}
+.form-nav{display:flex;justify-content:space-between;align-items:center;margin-top:36px;padding-top:20px;border-top:1px solid var(--border)}
+.btn-back{font-family:inherit;font-size:13px;font-weight:500;color:var(--text2);background:none;border:none;cursor:pointer;transition:color .2s;display:flex;align-items:center;gap:6px}
+.btn-back:hover{color:var(--text)}
+.btn-next{font-family:inherit;font-size:13px;font-weight:600;background:var(--white);color:var(--bg);border:none;padding:10px 22px;cursor:pointer;transition:opacity .2s}
+.btn-next:hover{opacity:.85}
+.btn-submit{font-family:inherit;font-size:13px;font-weight:600;background:var(--gold);color:var(--bg);border:none;padding:10px 22px;cursor:pointer;transition:opacity .2s}
+.btn-submit:hover{opacity:.85}
+.success-wrap{display:none;text-align:center;padding:80px 32px;max-width:480px;margin:0 auto}
+.success-wrap.show{display:block;animation:fadeIn .4s ease}
+.success-icon{font-size:48px;margin-bottom:20px}
+.success-title{font-size:22px;font-weight:800;margin-bottom:10px}
+.success-body{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:24px}
+.success-id{font-family:'Inter',sans-serif;font-size:12px;background:var(--bg2);border:1px solid var(--border2);padding:8px 16px;color:var(--text2);letter-spacing:.1em;display:inline-block}
+.success-btns{display:flex;gap:10px;justify-content:center;margin-top:20px}
+
+/* ══ IDEA PAGE ══ */
+#page-idea{background:var(--bg)}
+.idea-layout{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:320px 1fr;gap:24px;padding:32px}
+.idea-sidebar{position:sticky;top:72px;height:fit-content}
+.camp-card{border:1px solid var(--border);background:var(--bg1);padding:24px}
+.cc-label{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);margin-bottom:14px}
+.cc-brand{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.cc-logo{width:40px;height:40px;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;flex-shrink:0}
+.cc-bname{font-size:15px;font-weight:800;color:var(--white)}
+.cc-cat{font-size:11px;color:var(--text3)}
+.cc-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:7px;line-height:1.4}
+.cc-desc{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:18px}
+.cc-divider{height:1px;background:var(--border);margin-bottom:16px}
+.cc-row{display:flex;justify-content:space-between;margin-bottom:10px}
+.cc-key{font-size:11px;color:var(--text3)}
+.cc-val{font-size:12px;font-weight:600;color:var(--text)}
+.cc-val.gold{color:var(--gold);font-size:14px;font-weight:900}
+.cc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:14px}
+.cc-tag{font-size:10px;background:var(--bg3);border:1px solid var(--border2);color:var(--text3);padding:3px 8px}
+.idea-form{padding:0}
+.if-title{font-size:20px;font-weight:800;margin-bottom:4px;letter-spacing:-.01em}
+.if-sub{font-size:13px;color:var(--text2);margin-bottom:28px}
+.idea-types{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:7px}
+.idea-type{border:1px solid var(--border2);background:var(--bg1);padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s}
+.idea-type:hover{border-color:var(--text3)}
+.idea-type.sel{border-color:var(--white);background:var(--bg2)}
+.idea-type-icon{font-size:20px;margin-bottom:5px}
+.idea-type-label{font-size:11px;font-weight:600;color:var(--text2)}
+.idea-type.sel .idea-type-label{color:var(--white)}
+.field-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.field-top label{font-size:12px;font-weight:600;color:var(--text2);letter-spacing:.03em}
+.field-top label span{color:var(--red);margin-right:2px}
+.char-count{font-size:10px;color:var(--text3);font-family:'Inter',sans-serif}
+.char-count.warn{color:var(--red)}
+.score-wrap{margin:20px 0;padding:18px;background:var(--bg1);border:1px solid var(--border)}
+.score-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.score-bar-bg{height:3px;background:var(--border2);overflow:hidden;margin-bottom:10px}
+.score-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .4s ease;width:0%}
+.score-tips{display:flex;flex-wrap:wrap;gap:10px}
+.score-tip{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px}
+.score-tip::before{content:'○';font-size:9px}
+.score-tip.done{color:var(--green)}
+.score-tip.done::before{content:'●'}
+.idea-submit-row{display:flex;gap:10px;margin-top:12px}
+.btn-submit-idea{flex:1;font-family:inherit;font-size:14px;font-weight:700;background:var(--gold);color:var(--bg);border:none;padding:13px;cursor:pointer;transition:opacity .2s}
+.btn-submit-idea:hover{opacity:.85}
+.btn-cancel{font-family:inherit;font-size:13px;font-weight:500;background:none;color:var(--text2);border:1px solid var(--border2);padding:13px 20px;cursor:pointer;transition:all .2s}
+.btn-cancel:hover{color:var(--text);border-color:var(--text3)}
+
+/* WINNER SHOWCASE */
+.winners-section{max-width:1080px;margin:0 auto;padding:60px 32px 80px;border-top:1px solid var(--border)}
+.winners-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.winner-card{background:var(--bg1);border:1px solid var(--border);padding:24px;position:relative;transition:border-color .2s}
+.winner-card:hover{border-color:var(--border2)}
+.winner-badge{position:absolute;top:16px;left:16px;background:var(--gold);color:var(--bg);font-size:9px;font-weight:800;padding:3px 8px;letter-spacing:.1em;text-transform:uppercase}
+.winner-brand{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;margin-top:8px}
+.winner-idea{font-size:14px;font-weight:700;color:var(--white);margin-bottom:8px;line-height:1.4}
+.winner-body{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:14px}
+.winner-footer{display:flex;justify-content:space-between;align-items:center}
+.winner-prize{font-size:12px;font-weight:700;color:var(--gold)}
+.winner-name{font-size:11px;color:var(--text3)}
+
+/* CAMPAIGNS LIST */
+.camps-section{max-width:1080px;margin:0 auto;padding:0 32px 60px}
+.camps-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.camp-item{border:1px solid var(--border);background:var(--bg1);padding:22px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.camp-item:hover{border-color:var(--border2);background:var(--bg2)}
+.camp-item::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold2));opacity:0;transition:opacity .2s}
+.camp-item:hover::after{opacity:1}
+.camp-brand-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.camp-logo{width:34px;height:34px;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;flex-shrink:0}
+.camp-bname{font-size:13px;font-weight:700;color:var(--white)}
+.camp-cat{font-size:10px;color:var(--text3)}
+.camp-badge{margin-right:auto}
+.badge-open{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;background:rgba(34,197,94,.1);color:var(--green)}
+.badge-hot{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;background:rgba(239,68,68,.1);color:var(--red)}
+.camp-title{font-size:14px;font-weight:600;color:var(--white);margin-bottom:7px;line-height:1.4}
+.camp-desc{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:14px}
+.camp-footer{display:flex;align-items:center;justify-content:space-between}
+.camp-prize{font-size:13px;font-weight:800;color:var(--gold)}
+.camp-meta{font-size:11px;color:var(--text3);display:flex;gap:12px}
+
+/* ══ DASHBOARD (same as before, simplified) ══ */
+#page-dashboard{background:var(--bg)}
+.dash-layout{display:grid;grid-template-columns:200px 1fr;min-height:calc(100vh - 56px)}
+.dash-sidebar{border-right:1px solid var(--border);background:var(--bg1);padding:20px 0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
+.dci{padding:0 16px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.dci-l{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.dci-n{font-size:12px;font-weight:700;color:var(--white);margin-bottom:3px}
+.dci-b{font-size:10px;color:var(--text3)}
+.dash-nav{display:flex;flex-direction:column}
+.dash-ni{display:flex;align-items:center;gap:9px;padding:8px 16px;cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);transition:all .2s;border-right:2px solid transparent}
+.dash-ni:hover{color:var(--text);background:var(--bg2)}
+.dash-ni.active{color:var(--white);background:var(--bg2);border-right-color:var(--white)}
+.dash-ni-badge{margin-right:auto;font-size:10px;font-weight:700;background:var(--bg3);color:var(--text3);padding:1px 6px;border-radius:10px;font-family:'Inter',sans-serif}
+.dash-main{padding:28px;overflow-y:auto}
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px}
+.metric{background:var(--bg1);border:1px solid var(--border);padding:18px}
+.metric-l{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.metric-v{font-size:28px;font-weight:900;color:var(--white);line-height:1;margin-bottom:4px;letter-spacing:-.02em}
+.metric-d{font-size:11px;color:var(--green)}
+.table-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.table-title{font-size:14px;font-weight:700;color:var(--white)}
+.filter-row{display:flex;gap:6px}
+.fbtn{font-family:inherit;font-size:11px;font-weight:500;color:var(--text2);background:var(--bg2);border:1px solid var(--border2);padding:5px 10px;cursor:pointer;transition:all .2s}
+.fbtn:hover{color:var(--text)}
+.fbtn.active{color:var(--white);border-color:var(--text3)}
+.ideas-list{display:flex;flex-direction:column;gap:8px}
+.idea-row{background:var(--bg1);border:1px solid var(--border);padding:18px;display:grid;grid-template-columns:auto 1fr auto auto auto;gap:14px;align-items:start;cursor:pointer;transition:all .2s}
+.idea-row:hover{border-color:var(--border2);background:var(--bg2)}
+.idea-row.sel{border-color:var(--gold);background:rgba(212,168,67,.03)}
+.rank{width:26px;height:26px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text3);font-family:'Inter',sans-serif;flex-shrink:0}
+.rank.top{border-color:var(--gold);color:var(--gold);background:rgba(212,168,67,.08)}
+.idea-content .idea-t{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px;line-height:1.4}
+.idea-content .idea-p{font-size:11px;color:var(--text2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.type-badge{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;background:var(--bg3);color:var(--text3);align-self:start;white-space:nowrap;flex-shrink:0}
+.votes-col{text-align:center;flex-shrink:0}
+.votes-n{font-size:15px;font-weight:800;color:var(--white);line-height:1}
+.votes-l{font-size:9px;color:var(--text3);letter-spacing:.05em}
+.act-col{display:flex;flex-direction:column;gap:5px;align-self:start;flex-shrink:0}
+.btn-sl{font-family:inherit;font-size:10px;font-weight:600;background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.2);padding:4px 9px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-sl:hover{background:rgba(34,197,94,.2)}
+.btn-sl.active{background:rgba(34,197,94,.25);border-color:var(--green)}
+.btn-rj{font-family:inherit;font-size:10px;font-weight:500;background:none;color:var(--text3);border:1px solid var(--border2);padding:4px 9px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-rj:hover{color:var(--red)}
+
+/* DETAIL PANEL */
+.detail-panel{display:none;position:fixed;top:56px;right:0;bottom:0;width:380px;background:var(--bg1);border-left:1px solid var(--border);z-index:50;overflow-y:auto;padding:24px;animation:fadeIn .2s ease}
+.detail-panel.show{display:block}
+.dp-close{font-family:inherit;font-size:12px;color:var(--text3);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;margin-bottom:20px;transition:color .2s}
+.dp-close:hover{color:var(--text)}
+.dp-type{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;background:var(--bg3);border:1px solid var(--border2);color:var(--text3);margin-bottom:14px}
+.dp-title{font-size:17px;font-weight:800;color:var(--white);margin-bottom:14px;line-height:1.3;letter-spacing:-.01em}
+.dp-body{font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:20px}
+.dp-div{height:1px;background:var(--border);margin-bottom:16px}
+.dp-row{display:flex;justify-content:space-between;margin-bottom:10px}
+.dp-key{font-size:11px;color:var(--text3)}
+.dp-val{font-size:12px;font-weight:600;color:var(--text)}
+.dp-actions{display:flex;gap:8px;margin-top:20px}
+.btn-sl-lg{flex:1;font-family:inherit;font-size:13px;font-weight:600;background:var(--green);color:#fff;border:none;padding:10px;cursor:pointer;transition:opacity .2s}
+.btn-sl-lg:hover{opacity:.85}
+.btn-rj-lg{font-family:inherit;font-size:13px;font-weight:500;background:var(--bg2);color:var(--text2);border:1px solid var(--border2);padding:10px 16px;cursor:pointer;transition:all .2s}
+.btn-rj-lg:hover{color:var(--text)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:24px 32px;display:flex;justify-content:space-between;align-items:center}
+.f-logo{font-size:13px;font-weight:800;color:var(--gold)}
+.f-note{font-size:10px;color:var(--text3);letter-spacing:.04em}
+
+@media(max-width:900px){
+  .split-hero{flex-direction:column}
+  .split-divider{width:100%;height:1px}
+  .split-divider::after{top:50%;left:50%;transform:translate(-50%,-50%);padding:0 8px}
+  .brand-stats{grid-template-columns:1fr 1fr;margin:0 16px 60px}
+  .bstat:nth-child(2){border-right:none}
+  .bstat:nth-child(3){border-top:1px solid var(--border)}
+  .case-row{grid-template-columns:1fr}
+  .case-brand-col,.case-body-col{border-right:none;border-bottom:1px solid var(--border)}
+  .case-metric-col{align-items:flex-start}
+  .idea-layout{grid-template-columns:1fr;gap:0}
+  .idea-sidebar{position:static}
+  .winners-grid{grid-template-columns:1fr}
+  .camps-grid{grid-template-columns:1fr}
+  .dash-layout{grid-template-columns:1fr}
+  .dash-sidebar{display:none}
+  .metrics-row{grid-template-columns:1fr 1fr}
+  .idea-row{grid-template-columns:auto 1fr}
+  .votes-col,.act-col{display:none}
+  .mid-cta{flex-direction:column;text-align:center;margin:0 16px 60px}
+  nav{padding:0 16px}
+  .cases-section{padding:0 16px 60px}
+  .brand-hero{padding:60px 16px 40px}
+  .brand-cta{padding:60px 16px}
+  .field-row{grid-template-columns:1fr}
+  .prize-opts{grid-template-columns:1fr 1fr}
+  .idea-types{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="showPage('split')"><div class="nav-dot"></div><span>IdeaBazar</span></div>
+  <div class="nav-links">
+    <button class="nav-btn" id="nb-brand" onclick="showPage('brand')"><span class="fa-txt">برای برندها</span><span class="en-txt hidden">For Brands</span></button>
+    <button class="nav-btn" id="nb-idea" onclick="showPage('idea')"><span class="fa-txt">ارسال ایده</span><span class="en-txt hidden">Submit Idea</span></button>
+    <button class="nav-btn" id="nb-dash" onclick="showPage('dashboard')"><span class="fa-txt">داشبورد</span><span class="en-txt hidden">Dashboard</span></button>
+    <button class="lang-btn" onclick="toggleLang()">EN</button>
+  </div>
+</nav>
+
+<!-- ════ SPLIT PAGE ════ -->
+<div class="page active" id="page-split">
+  <div class="split-hero">
+
+    <!-- BRAND SIDE -->
+    <div class="split-side" onclick="showPage('brand')">
+      <div class="split-side-glow glow-gold" style="top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+      <div class="split-icon">🏆</div>
+      <div class="split-tag fa-txt">برای کسب‌وکارها</div>
+      <div class="split-tag en-txt hidden" style="font-family:'Inter',sans-serif">For Businesses</div>
+      <h2 class="split-title">
+        <span class="fa-txt">به <span class="grad">ایده</span> نیاز دارم</span>
+        <span class="en-txt hidden" style="font-family:'Inter',sans-serif">I Need <span class="grad">Ideas</span></span>
+      </h2>
+      <p class="split-sub fa-txt">کمپین تبلیغاتی بگذار، از هزاران ذهن خلاق ایده بگیر — از هر اندازه کسب‌وکار</p>
+      <p class="split-sub en-txt hidden">Post a campaign, get ideas from thousands of creative minds — any business size</p>
+      <button class="split-btn btn-gold fa-txt">شروع کنیم ←</button>
+      <button class="split-btn btn-gold en-txt hidden">Get Started →</button>
+      <div class="split-features" style="margin-top:24px">
+        <div class="split-feat fa-txt">بدون نیاز به آژانس تبلیغاتی گران</div>
+        <div class="split-feat fa-txt">صدها ایده در عرض چند روز</div>
+        <div class="split-feat fa-txt">فقط برای ایده برنده پول بده</div>
+        <div class="split-feat en-txt hidden">No expensive ad agency needed</div>
+        <div class="split-feat en-txt hidden">Hundreds of ideas in days</div>
+        <div class="split-feat en-txt hidden">Pay only for the winning idea</div>
+      </div>
+    </div>
+
+    <div class="split-divider"></div>
+
+    <!-- IDEA SIDE -->
+    <div class="split-side" onclick="showPage('idea')">
+      <div class="split-side-glow glow-blue" style="top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+      <div class="split-icon">💡</div>
+      <div class="split-tag fa-txt">برای ایده‌پردازان</div>
+      <div class="split-tag en-txt hidden" style="font-family:'Inter',sans-serif">For Idea Creators</div>
+      <h2 class="split-title">
+        <span class="fa-txt">ایده دارم، <span class="grad-blue">می‌فروشم</span></span>
+        <span class="en-txt hidden" style="font-family:'Inter',sans-serif">I Have <span class="grad-blue">Ideas</span></span>
+      </h2>
+      <p class="split-sub fa-txt">ایده‌ات رو به برندهای بزرگ بفروش — بدون نیاز به مدرک یا سابقه</p>
+      <p class="split-sub en-txt hidden">Sell your ideas to real brands — no degree or experience needed</p>
+      <button class="split-btn btn-blue fa-txt">ایده‌ها رو ببین ←</button>
+      <button class="split-btn btn-blue en-txt hidden">See Campaigns →</button>
+      <div class="split-features" style="margin-top:24px">
+        <div class="split-feat fa-txt">کمپین‌های فعال با جوایز واقعی</div>
+        <div class="split-feat fa-txt">هر کسی می‌تونه شرکت کنه</div>
+        <div class="split-feat fa-txt">ایده برنده = پول واقعی</div>
+        <div class="split-feat en-txt hidden">Active campaigns with real prizes</div>
+        <div class="split-feat en-txt hidden">Anyone can participate</div>
+        <div class="split-feat en-txt hidden">Winning idea = real money</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════ BRAND PAGE ════ -->
+<div class="page" id="page-brand">
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <div class="ticker-item"><span>Doritos</span> از ۱.۵۴B$ به ۲.۲B$ رشد کرد <span>·</span></div>
+      <div class="ticker-item"><span>Starbucks</span> درآمد ۱۰٪ رشد کرد <span>·</span></div>
+      <div class="ticker-item"><span>Lay's</span> فروش ۸٪ در ۳ ماه بالا رفت <span>·</span></div>
+      <div class="ticker-item"><span>LEGO</span> ۲.۸ میلیون کاربر فعال <span>·</span></div>
+      <div class="ticker-item"><span>Mountain Dew</span> ۱ میلیون دلار جایزه <span>·</span></div>
+      <div class="ticker-item"><span>Doritos</span> از ۱.۵۴B$ به ۲.۲B$ رشد کرد <span>·</span></div>
+      <div class="ticker-item"><span>Starbucks</span> درآمد ۱۰٪ رشد کرد <span>·</span></div>
+      <div class="ticker-item"><span>Lay's</span> فروش ۸٪ در ۳ ماه بالا رفت <span>·</span></div>
+      <div class="ticker-item"><span>LEGO</span> ۲.۸ میلیون کاربر فعال <span>·</span></div>
+      <div class="ticker-item"><span>Mountain Dew</span> ۱ میلیون دلار جایزه <span>·</span></div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="brand-hero">
+    <div class="brand-eyebrow fa-txt">نمونه‌های جهانی · داده‌های تأییدشده</div>
+    <div class="brand-eyebrow en-txt hidden" style="font-family:'Inter',sans-serif">Global Cases · Verified Data</div>
+    <h1 class="brand-h">
+      <span class="fa-txt">مشتریانت<br>برایت <span class="gold">تبلیغ می‌سازند</span></span>
+      <span class="en-txt hidden" style="font-family:'Inter',sans-serif">Your Customers<br><span class="gold">Build Your Ads</span></span>
+    </h1>
+    <p class="brand-sub fa-txt">برزگ‌ترین برندهای دنیا به جای قراردادهای سنگین با آژانس، از هوش جمعی مشتریانشان استفاده کردند — و نتیجه، اعداد باورنکردنی بود.</p>
+    <p class="brand-sub en-txt hidden">The world's biggest brands replaced expensive agency contracts with collective intelligence from their customers — and the results were extraordinary.</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="brand-stats">
+    <div class="bstat"><div class="bstat-n">+۶۴۳M$</div><div class="bstat-l fa-txt">رشد ارزش برند دوریتوس</div><div class="bstat-l en-txt hidden">Doritos Brand Growth</div></div>
+    <div class="bstat"><div class="bstat-n">۱۵۰K+</div><div class="bstat-l fa-txt">ایده به استارباکس</div><div class="bstat-l en-txt hidden">Ideas to Starbucks</div></div>
+    <div class="bstat"><div class="bstat-n">+۸٪</div><div class="bstat-l fa-txt">فروش Lay's در ۳ ماه</div><div class="bstat-l en-txt hidden">Lay's Sales in 3 Months</div></div>
+    <div class="bstat"><div class="bstat-n">۲.۸M</div><div class="bstat-l fa-txt">کاربر فعال LEGO</div><div class="bstat-l en-txt hidden">LEGO Active Users</div></div>
+  </div>
+
+  <!-- CASE STUDIES -->
+  <div class="cases-section">
+    <div class="sec-label fa-txt">۱۰ نمونه واقعی با داده تأییدشده</div>
+    <div class="sec-label en-txt hidden">10 Real Cases · Verified Data</div>
+
+    <div class="cases-list">
+
+      <div class="case-row">
+        <div class="case-brand-col"><div class="case-brand-name">Doritos</div><div class="case-brand-year">۲۰۰۶ – ۲۰۱۶</div></div>
+        <div class="case-body-col">
+          <div class="case-campaign">Crash the Super Bowl</div>
+          <div class="case-result fa-txt">برند از ۱.۵۴ میلیارد به ۲.۲ میلیارد دلار رسید — در ۱۰ سال</div>
+          <div class="case-result en-txt hidden">Brand grew from $1.54B to $2.2B — over 10 years</div>
+          <div class="case-detail fa-txt">مردم عادی ۳۰ ثانیه تبلیغ ساختند. ۵۰۰۰+ ویدیو در سال پیک. ۴ بار رتبه اول Ad Meter آمریکا. CMO فریتو-لی این کمپین را عامل رشد برند اعلام کرد.</div>
+          <div class="case-detail en-txt hidden">Regular people made 30-second ads. 5,000+ videos at peak. 4× USA Today Ad Meter #1. Frito-Lay CMO credited this campaign for brand growth.</div>
+          <div class="source-badge">منبع: RobMark.com · TheBrandHopper.com · Iowa State University Research</div>
+        </div>
+        <div class="case-metric-col"><div class="case-num">+$643M</div><div class="case-num-label">Brand Value</div></div>
+      </div>
+
+      <div class="case-row">
+        <div class="case-brand-col"><div class="case-brand-name">Starbucks</div><div class="case-brand-year">۲۰۰۸ – ۲۰۱۸</div></div>
+        <div class="case-body-col">
+          <div class="case-campaign">My Starbucks Idea</div>
+          <div class="case-result fa-txt">پس از ۲ سال افت، درآمد ۱۰٪ رشد کرد — ۲۷۷ ایده اجرایی شد</div>
+          <div class="case-result en-txt hidden">After 2 years of decline, revenue grew ~10% — 277 ideas implemented</div>
+          <div class="case-detail fa-txt">۱۵۰,۰۰۰+ ایده در ۵ سال. WiFi رایگان، Cake Pops، و پرداخت موبایلی از دل این جمع بیرون آمد. مشتری احساس مالکیت کرد و برند را ترک نکرد.</div>
+          <div class="case-detail en-txt hidden">150,000+ ideas in 5 years. Free Wi-Fi, Cake Pops, mobile payments came from this crowd. Customers felt ownership and didn't leave the brand.</div>
+          <div class="source-badge">منبع: Stanford eCorner · Harvard Digital · MarketingWithDave.com</div>
+        </div>
+        <div class="case-metric-col"><div class="case-num">+10%</div><div class="case-num-label">Revenue Growth</div></div>
+      </div>
+
+      <div class="case-row">
+        <div class="case-brand-col"><div class="case-brand-name">Lay's / PepsiCo</div><div class="case-brand-year">۲۰۱۲ – ادامه</div></div>
+        <div class="case-body-col">
+          <div class="case-campaign">Do Us a Flavor</div>
+          <div class="case-result fa-txt">فروش ۸٪ در ۳ ماه اول. ۱۴.۴ میلیون پیشنهاد طعم در یک سال</div>
+          <div class="case-result en-txt hidden">Sales up 8% in first 3 months. 14.4M flavor suggestions in one year</div>
+          <div class="case-detail fa-txt">مردم طعم بعدی چیپس را انتخاب کردند. جایزه ۱ میلیون دلار. ۳ طعم نهایی به قفسه فروشگاه‌ها رفتند. مردم نه فقط ایده دادند — بلکه خریدند.</div>
+          <div class="case-detail en-txt hidden">People chose the next chip flavor. $1M prize. 3 finalist flavors hit store shelves. People didn't just submit — they bought.</div>
+          <div class="source-badge">منبع: Iowa State University Research 2023</div>
+        </div>
+        <div class="case-metric-col"><div class="case-num">14.4M</div><div class="case-num-label">Submissions</div></div>
+      </div>
+
+      <div class="case-row">
+        <div class="case-brand-col"><div class="case-brand-name">LEGO</div><div class="case-brand-year">۲۰۰۸ – ادامه</div></div>
+        <div class="case-body-col">
+          <div class="case-campaign">LEGO Ideas</div>
+          <div class="case-result fa-txt">۲.۸ میلیون کاربر فعال. ۱۳۵,۰۰۰+ ایده برای محصولات جدید</div>
+          <div class="case-result en-txt hidden">2.8M active users. 135,000+ ideas for new products</div>
+          <div class="case-detail fa-txt">ایده‌دهنده برنده ۱٪ از درآمد خالص محصول می‌گیرد — برای همیشه. این مدل residual باعث می‌شود خلاقان ایده‌های واقعاً خوب بدهند.</div>
+          <div class="case-detail en-txt hidden">Winning idea creator gets 1% of net revenue — forever. This residual model ensures creators submit truly quality ideas.</div>
+          <div class="source-badge">منبع: LEGO Ideas Official · Iowa State University Research</div>
+        </div>
+        <div class="case-metric-col"><div class="case-num">2.8M</div><div class="case-num-label">Active Users</div></div>
+      </div>
+
+      <div class="case-row">
+        <div class="case-brand-col"><div class="case-brand-name">Mountain Dew</div><div class="case-brand-year">۲۰۰۸ – ادامه</div></div>
+        <div class="case-body-col">
+          <div class="case-campaign">Dub the Dew</div>
+          <div class="case-result fa-txt">جامعه طرفداران طعم بعدی نوشیدنی را انتخاب می‌کنند — از ۲۰۰۸ مداوم</div>
+          <div class="case-result en-txt hidden">Fan community picks the next flavor — ongoing since 2008</div>
+          <div class="case-detail fa-txt">جایزه ۱ میلیون دلار انگیزه ایجاد کرد. این مدل باعث شد طرفداران همیشه درگیر برند بمانند و به رقیب نروند.</div>
+          <div class="case-detail en-txt hidden">$1M prize created massive engagement. This kept fans engaged with the brand and loyal.</div>
+          <div class="source-badge">منبع: Iowa State University Research · PepsiCo Annual Reports</div>
+        </div>
+        <div class="case-metric-col"><div class="case-num">$1M</div><div class="case-num-label">Prize Pool</div></div>
+      </div>
+
+      <div class="case-row">
+        <div class="case-brand-col"><div class="case-brand-name">GoPro</div><div class="case-brand-year">۲۰۱۰ – ادامه</div></div>
+        <div class="case-body-col">
+          <div class="case-campaign">User Generated Content</div>
+          <div class="case-result fa-txt">کل برند GoPro روی محتوای کاربران ساخته شد — هزینه تولید تبلیغ: صفر</div>
+          <div class="case-result en-txt hidden">Entire GoPro brand built on user content — production cost: zero</div>
+          <div class="case-detail fa-txt">مشتریان فیلم‌هایشان را با GoPro گرفتند و منتشر کردند. این خود بزرگ‌ترین تبلیغ برند بود. GoPro هرگز آژانس بزرگ تبلیغاتی نداشت.</div>
+          <div class="case-detail en-txt hidden">Customers filmed their adventures and shared them. That was the brand's biggest ad. GoPro never needed a big ad agency.</div>
+          <div class="source-badge">منبع: GoPro Annual Report · Forbes</div>
+        </div>
+        <div class="case-metric-col"><div class="case-num">$0</div><div class="case-num-label">Production Cost</div></div>
+      </div>
+
+      <div class="case-row">
+        <div class="case-brand-col"><div class="case-brand-name">Nestlé</div><div class="case-brand-year">۲۰۰۸ – ادامه</div></div>
+        <div class="case-body-col">
+          <div class="case-campaign">Crowdsourcing Innovation</div>
+          <div class="case-result fa-txt">الهام از موفقیت دوریتوس — یکی از اولین برندهای بزرگ غذایی پس از Frito-Lay</div>
+          <div class="case-result en-txt hidden">Inspired by Doritos success — one of first major food brands after Frito-Lay</div>
+          <div class="case-detail fa-txt">Iowa State University تأیید کرده که موفقیت دوریتوس باعث شد Nestlé، BMW و Fisher-Price هم وارد crowdsourcing شوند. این اثر دومینو نشان می‌دهد مدل کار می‌کند.</div>
+          <div class="case-detail en-txt hidden">Iowa State confirmed Doritos success inspired Nestlé, BMW and Fisher-Price to launch their own crowdsourcing. Domino effect proves the model works.</div>
+          <div class="source-badge">منبع: Iowa State University Research 2023</div>
+        </div>
+        <div class="case-metric-col"><div class="case-num">اثر<br>دومینو</div><div class="case-num-label">Domino Effect</div></div>
+      </div>
+
+      <div class="case-row">
+        <div class="case-brand-col"><div class="case-brand-name">Ben & Jerry's</div><div class="case-brand-year">۲۰۱۰ – ادامه</div></div>
+        <div class="case-body-col">
+          <div class="case-campaign">Do Us a Flavor</div>
+          <div class="case-result fa-txt">مشتریان طعم‌های جدید بستنی پیشنهاد دادند — بهترین ایده تولید شد</div>
+          <div class="case-result en-txt hidden">Customers suggested new ice cream flavors — best idea was produced</div>
+          <div class="case-detail fa-txt">این مدل در صنعت غذا بارها اثبات شده. برند به جای R&D داخلی گران، مستقیم از مشتری پرسید چه می‌خواهد — و مشتری پاسخ داد.</div>
+          <div class="case-detail en-txt hidden">This model has been proven repeatedly in food industry. Instead of expensive internal R&D, just ask your customer directly.</div>
+          <div class="source-badge">منبع: Iowa State University Research · Unilever Annual Reports</div>
+        </div>
+        <div class="case-metric-col"><div class="case-num">R&D<br>رایگان</div><div class="case-num-label">Free R&D</div></div>
+      </div>
+
+      <div class="case-row">
+        <div class="case-brand-col"><div class="case-brand-name">Doritos</div><div class="case-brand-year">۲۰۲۴</div></div>
+        <div class="case-body-col">
+          <div class="case-campaign">Super Bowl LVIII</div>
+          <div class="case-result fa-txt">بازگشت پس از ۸ سال — ۳۰ میلیون ویو در YouTube در چند هفته</div>
+          <div class="case-result en-txt hidden">Return after 8 years — 30M YouTube views within weeks</div>
+          <div class="case-detail fa-txt">دوریتوس Dinamita با Jenna Ortega در Super Bowl 2024. تبلیغ ۳۰ ثانیه ۷ میلیون دلار هزینه داشت ولی UGC legacy همچنان اثرگذار است.</div>
+          <div class="case-detail en-txt hidden">Doritos Dinamita with Jenna Ortega at Super Bowl 2024. 30-second spot cost ~$7M but UGC legacy still drives engagement.</div>
+          <div class="source-badge">منبع: Latterly.org · AdAge 2024</div>
+        </div>
+        <div class="case-metric-col"><div class="case-num">30M</div><div class="case-num-label">YouTube Views</div></div>
+      </div>
+
+      <div class="case-row">
+        <div class="case-brand-col"><div class="case-brand-name">Frito-Lay</div><div class="case-brand-year">۲۰۱۰ – ادامه</div></div>
+        <div class="case-body-col">
+          <div class="case-campaign">Multiple Campaigns</div>
+          <div class="case-result fa-txt">۳.۸ میلیون پیشنهاد در یک کمپین ۱۰ ماهه</div>
+          <div class="case-result en-txt hidden">3.8M submissions in one 10-month campaign</div>
+          <div class="case-detail fa-txt">سه طعم نهایی به فروشگاه‌ها رفتند. مردم نه فقط ایده دادند بلکه رای دادند و خریدند. این تفاوت crowdsourcing با نظرسنجی معمولی است.</div>
+          <div class="case-detail en-txt hidden">3 finalist flavors hit stores. People didn't just submit — they voted and bought. That's the difference between crowdsourcing and a regular survey.</div>
+          <div class="source-badge">منبع: Iowa State University Research 2023</div>
+        </div>
+        <div class="case-metric-col"><div class="case-num">3.8M</div><div class="case-num-label">Submissions</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MID CTA -->
+  <div class="mid-cta">
+    <div class="mid-cta-text">
+      <h3 class="fa-txt">برند شما هم می‌تواند همین کار را کند</h3>
+      <h3 class="en-txt hidden">Your brand can do the same</h3>
+      <p class="fa-txt">اولین کمپین رایگان — بدون ریسک. اگر راضی نشدی پول پس می‌گیری.</p>
+      <p class="en-txt hidden">First campaign free — no risk. Money back if you're not satisfied.</p>
+    </div>
+    <button class="mid-cta-badge fa-txt" onclick="showBrandForm()">ثبت کمپین رایگان ←</button>
+    <button class="mid-cta-badge en-txt hidden" onclick="showBrandForm()">Post Free Campaign →</button>
+  </div>
+
+  <!-- REGISTER FORM -->
+  <div id="brand-form-section" style="display:none">
+    <div class="reg-wrap">
+      <div class="reg-title fa-txt">ثبت کمپین جدید</div>
+      <div class="reg-title en-txt hidden">New Campaign</div>
+      <div class="reg-sub fa-txt">اطلاعات کمپین را وارد کنید. در کمتر از ۲۴ ساعت منتشر می‌شود.</div>
+      <div class="reg-sub en-txt hidden">Enter your campaign details. Published within 24 hours.</div>
+
+      <div class="steps-nav">
+        <div class="step-tab active" id="st1"><div class="step-num">۱</div><span class="fa-txt">اطلاعات برند</span><span class="en-txt hidden">Brand Info</span></div>
+        <div class="step-tab" id="st2"><div class="step-num">۲</div><span class="fa-txt">جزئیات کمپین</span><span class="en-txt hidden">Campaign Details</span></div>
+        <div class="step-tab" id="st3"><div class="step-num">۳</div><span class="fa-txt">جایزه و زمان</span><span class="en-txt hidden">Prize & Timeline</span></div>
+      </div>
+
+      <div class="form-step active" id="fstep1">
+        <div class="field-row">
+          <div class="field"><label><span>*</span><span class="fa-txt">نام برند</span><span class="en-txt hidden">Brand Name</span></label><input type="text" placeholder="مثال: دیجیکالا"></div>
+          <div class="field"><label><span>*</span><span class="fa-txt">صنعت</span><span class="en-txt hidden">Industry</span></label><select><option value=""><span class="fa-txt">انتخاب کنید</span></option><option>فروشگاه آنلاین</option><option>تکنولوژی</option><option>غذا</option><option>حمل و نقل</option><option>سایر</option></select></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label><span>*</span><span class="fa-txt">نام مسئول</span><span class="en-txt hidden">Contact Name</span></label><input type="text"></div>
+          <div class="field"><label><span>*</span><span class="fa-txt">شماره تماس</span><span class="en-txt hidden">Phone</span></label><input type="tel" style="direction:ltr;text-align:right"></div>
+        </div>
+        <div class="field"><label><span class="fa-txt">ایمیل</span><span class="en-txt hidden">Email</span></label><input type="email" style="direction:ltr;text-align:right"></div>
+        <div class="form-nav">
+          <button class="btn-back" onclick="showBrandForm(false)">← <span class="fa-txt">بازگشت</span><span class="en-txt hidden">Back</span></button>
+          <button class="btn-next" onclick="goStep(2)"><span class="fa-txt">بعدی ←</span><span class="en-txt hidden">Next →</span></button>
+        </div>
+      </div>
+
+      <div class="form-step" id="fstep2">
+        <div class="field"><label><span>*</span><span class="fa-txt">عنوان کمپین</span><span class="en-txt hidden">Campaign Title</span></label><input type="text" placeholder="مثال: شعار تبلیغاتی برای بلک‌فرایدی"></div>
+        <div class="field">
+          <div class="field-top"><label><span>*</span><span class="fa-txt">توضیح چالش</span><span class="en-txt hidden">Creative Brief</span></label><span class="char-count" id="brief-count">۰/۵۰۰</span></div>
+          <textarea id="brief-input" placeholder="دقیقاً چه ایده‌ای می‌خواهید؟ مخاطب کیست؟ چه احساسی باید منتقل شود؟" oninput="countBrief()"></textarea>
+        </div>
+        <div class="field">
+          <label><span class="fa-txt">نوع ایده مورد نیاز</span><span class="en-txt hidden">Idea Type Needed</span></label>
+          <div class="type-opts">
+            <div class="type-opt sel" onclick="this.classList.toggle('sel')">شعار تبلیغاتی</div>
+            <div class="type-opt" onclick="this.classList.toggle('sel')">سناریو ویدیو</div>
+            <div class="type-opt" onclick="this.classList.toggle('sel')">استراتژی</div>
+            <div class="type-opt" onclick="this.classList.toggle('sel')">ایده بصری</div>
+            <div class="type-opt" onclick="this.classList.toggle('sel')">کپی تبلیغاتی</div>
+            <div class="type-opt" onclick="this.classList.toggle('sel')">نام محصول</div>
+          </div>
+        </div>
+        <div class="form-nav">
+          <button class="btn-back" onclick="goStep(1)">←</button>
+          <button class="btn-next" onclick="goStep(3)"><span class="fa-txt">بعدی ←</span><span class="en-txt hidden">Next →</span></button>
+        </div>
+      </div>
+
+      <div class="form-step" id="fstep3">
+        <div class="field">
+          <label><span>*</span><span class="fa-txt">جایزه کمپین</span><span class="en-txt hidden">Campaign Prize</span></label>
+          <div class="prize-opts">
+            <div class="prize-opt" onclick="selPrize(this)"><div class="prize-n">۱۵M</div><div class="prize-l">تومان</div></div>
+            <div class="prize-opt sel" onclick="selPrize(this)"><div class="prize-n">۳۵M</div><div class="prize-l">تومان</div></div>
+            <div class="prize-opt" onclick="selPrize(this)"><div class="prize-n">۵۰M</div><div class="prize-l">تومان</div></div>
+            <div class="prize-opt" onclick="selPrize(this)"><div class="prize-n fa-txt">سفارشی</div><div class="prize-l fa-txt">مقدار دلخواه</div></div>
+          </div>
+          <div class="field-hint fa-txt">جایزه بالاتر = ایده‌های بهتر. میانگین پلتفرم ۳۵ میلیون است.</div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label><span class="fa-txt">مدت کمپین</span><span class="en-txt hidden">Duration</span></label><select><option>۱۴ روز</option><option selected>۲۱ روز</option><option>۳۰ روز</option></select></div>
+          <div class="field"><label><span class="fa-txt">تعداد برنده</span><span class="en-txt hidden">Winners</span></label><select><option selected>۱ برنده</option><option>۲ برنده</option><option>۳ برنده</option></select></div>
+        </div>
+        <div class="form-nav">
+          <button class="btn-back" onclick="goStep(2)">←</button>
+          <button class="btn-submit" onclick="submitCampaign()"><span class="fa-txt">ثبت کمپین 🎯</span><span class="en-txt hidden">Submit 🎯</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="success-wrap" id="brand-success">
+      <div class="success-icon">🎉</div>
+      <div class="success-title fa-txt">کمپین ثبت شد!</div>
+      <div class="success-title en-txt hidden">Campaign Submitted!</div>
+      <div class="success-body fa-txt">در کمتر از ۲۴ ساعت بررسی و منتشر می‌شود.</div>
+      <div class="success-body en-txt hidden">Will be reviewed and published within 24 hours.</div>
+      <div class="success-id">IB-۱۴۰۴-<span class="en">0049</span></div>
+      <div class="success-btns">
+        <button class="btn-primary" onclick="showPage('dashboard')"><span class="fa-txt">داشبورد ←</span><span class="en-txt hidden">Dashboard →</span></button>
+        <button class="btn-outline" onclick="resetBrand()"><span class="fa-txt">کمپین جدید</span><span class="en-txt hidden">New Campaign</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM CTA -->
+  <div class="brand-cta">
+    <div class="cta-glow"></div>
+    <h2 class="fa-txt">آماده‌اید شروع کنید؟</h2>
+    <h2 class="en-txt hidden">Ready to Start?</h2>
+    <p class="fa-txt">اولین کمپین رایگان — بدون ریسک — تا زمانی که ایده‌ای دریافت نکرده‌اید پولی پرداخت نمی‌کنید</p>
+    <p class="en-txt hidden">First campaign free — no risk — you don't pay until you receive ideas</p>
+    <div class="cta-buttons">
+      <button class="btn-primary fa-txt" onclick="showBrandForm()">ثبت کمپین رایگان ←</button>
+      <button class="btn-primary en-txt hidden" onclick="showBrandForm()">Post Free Campaign →</button>
+      <button class="btn-outline fa-txt" onclick="showPage('dashboard')">مشاهده داشبورد نمونه</button>
+      <button class="btn-outline en-txt hidden" onclick="showPage('dashboard')">View Sample Dashboard</button>
+    </div>
+  </div>
+
+  <footer><div class="f-logo">IdeaBazar</div><div class="f-note">منابع: Iowa State University · Stanford eCorner · Harvard Digital · MarketingWithDave.com</div></footer>
+</div>
+
+<!-- ════ IDEA PAGE ════ -->
+<div class="page" id="page-idea">
+
+  <!-- ACTIVE CAMPAIGNS -->
+  <div class="camps-section" style="padding-top:32px">
+    <div class="sec-label fa-txt">کمپین‌های فعال — ایده بده، جایزه بگیر</div>
+    <div class="sec-label en-txt hidden">Active Campaigns — Submit Ideas & Win</div>
+    <div class="camps-grid">
+      <div class="camp-item" onclick="openCamp('digikala')">
+        <div class="camp-brand-row"><div class="camp-logo">د</div><div><div class="camp-bname">دیجیکالا</div><div class="camp-cat">فروشگاه آنلاین</div></div><div class="camp-badge"><span class="badge-hot">🔥 داغ</span></div></div>
+        <div class="camp-title fa-txt">شعار تبلیغاتی برای کمپین بلک‌فرایدی ۱۴۰۴</div>
+        <div class="camp-title en-txt hidden">Advertising Slogan for Black Friday Campaign</div>
+        <div class="camp-desc fa-txt">یک شعار کوتاه، به‌یادماندنی و احساسی برای بزرگ‌ترین حراجی سال. باید حس فوریت و هیجان داشته باشد.</div>
+        <div class="camp-desc en-txt hidden">A short, memorable and emotional slogan for the biggest sale of the year. Should create urgency and excitement.</div>
+        <div class="camp-footer"><div class="camp-prize">🏆 ۳۵ میلیون تومان</div><div class="camp-meta"><span>۱۴۷ ایده</span><span>۸ روز مانده</span></div></div>
+      </div>
+      <div class="camp-item" onclick="openCamp('snapfood')">
+        <div class="camp-brand-row"><div class="camp-logo" style="background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.2);color:#60a5fa">ا</div><div><div class="camp-bname">اسنپ‌فود</div><div class="camp-cat">تکنولوژی / غذا</div></div><div class="camp-badge"><span class="badge-open">● باز</span></div></div>
+        <div class="camp-title fa-txt">سناریو ویدیو تبلیغاتی ۳۰ ثانیه</div>
+        <div class="camp-title en-txt hidden">30-Second Video Ad Scenario</div>
+        <div class="camp-desc fa-txt">داستانی که نشان دهد اسنپ‌فود فقط غذا نمی‌آورد — یک لحظه خوب می‌آورد.</div>
+        <div class="camp-desc en-txt hidden">A story showing Snapfood doesn't just deliver food — it delivers a good moment.</div>
+        <div class="camp-footer"><div class="camp-prize">🏆 ۵۰ میلیون تومان</div><div class="camp-meta"><span>۸۹ ایده</span><span>۱۵ روز مانده</span></div></div>
+      </div>
+      <div class="camp-item" onclick="openCamp('hamrah')">
+        <div class="camp-brand-row"><div class="camp-logo" style="background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.2);color:#a78bfa">ه</div><div><div class="camp-bname">همراه اول</div><div class="camp-cat">مخابرات</div></div><div class="camp-badge"><span class="badge-open">● باز</span></div></div>
+        <div class="camp-title fa-txt">کمپین برای جوانان ۱۸ تا ۲۵ ساله</div>
+        <div class="camp-title en-txt hidden">Campaign for Youth 18-25</div>
+        <div class="camp-desc fa-txt">می‌خواهیم نسل Z ایران را جذب کنیم. با زبان آن‌ها صحبت کند، نه زبان تبلیغات سنتی.</div>
+        <div class="camp-desc en-txt hidden">We want to attract Iran's Gen Z. Speak their language, not traditional advertising language.</div>
+        <div class="camp-footer"><div class="camp-prize">🏆 ۲۵ میلیون تومان</div><div class="camp-meta"><span>۲۳۴ ایده</span><span>۲۱ روز مانده</span></div></div>
+      </div>
+      <div class="camp-item" onclick="openCamp('tapsi')">
+        <div class="camp-brand-row"><div class="camp-logo" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.2);color:#4ade80">ت</div><div><div class="camp-bname">تپسی</div><div class="camp-cat">حمل و نقل</div></div><div class="camp-badge"><span class="badge-open">● باز</span></div></div>
+        <div class="camp-title fa-txt">اسلوگان جدید برای ریبرندینگ</div>
+        <div class="camp-title en-txt hidden">New Slogan for Rebranding</div>
+        <div class="camp-desc fa-txt">تپسی دارد تغییر می‌کند. اسلوگان جدیدی نیاز داریم که این تحول را نشان دهد.</div>
+        <div class="camp-desc en-txt hidden">Tapsi is changing. We need a new slogan that reflects this transformation.</div>
+        <div class="camp-footer"><div class="camp-prize">🏆 ۴۰ میلیون تومان</div><div class="camp-meta"><span>۵۶ ایده</span><span>۳۰ روز مانده</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IDEA FORM -->
+  <div class="idea-layout" id="idea-form-layout" style="display:none">
+    <div class="idea-sidebar">
+      <div class="camp-card">
+        <div class="cc-label fa-txt">کمپین انتخاب‌شده</div>
+        <div class="cc-label en-txt hidden">Selected Campaign</div>
+        <div class="cc-brand"><div class="cc-logo" id="cf-logo">د</div><div><div class="cc-bname" id="cf-bname">دیجیکالا</div><div class="cc-cat" id="cf-cat">فروشگاه آنلاین</div></div></div>
+        <div class="cc-title" id="cf-title">شعار تبلیغاتی برای کمپین بلک‌فرایدی ۱۴۰۴</div>
+        <div class="cc-desc" id="cf-desc">یک شعار کوتاه، به‌یادماندنی و احساسی برای بزرگ‌ترین حراجی سال.</div>
+        <div class="cc-divider"></div>
+        <div class="cc-row"><span class="cc-key fa-txt">جایزه</span><span class="cc-val gold" id="cf-prize">۳۵ میلیون تومان</span></div>
+        <div class="cc-row"><span class="cc-key fa-txt">زمان باقی</span><span class="cc-val" id="cf-time">۸ روز</span></div>
+        <div class="cc-row"><span class="cc-key fa-txt">ایده‌ها</span><span class="cc-val" id="cf-count">۱۴۷ ایده</span></div>
+        <div class="cc-tags"><span class="cc-tag fa-txt">شعار</span><span class="cc-tag fa-txt">احساسی</span><span class="cc-tag fa-txt">کوتاه</span></div>
+      </div>
+      <button class="btn-outline" style="width:100%;margin-top:12px" onclick="document.getElementById('idea-form-layout').style.display='none'"><span class="fa-txt">← کمپین دیگری انتخاب کن</span><span class="en-txt hidden">← Choose Another</span></button>
+    </div>
+
+    <div class="idea-form">
+      <div class="if-title fa-txt">ایده خود را ثبت کنید</div>
+      <div class="if-title en-txt hidden">Submit Your Idea</div>
+      <div class="if-sub fa-txt">ایده‌ای که می‌فروشد، ساده است. ایده‌ای که ماندگار می‌شود، صادقانه است.</div>
+      <div class="if-sub en-txt hidden">An idea that sells is simple. An idea that lasts is honest.</div>
+
+      <div class="field">
+        <label><span class="fa-txt">نوع ایده</span><span class="en-txt hidden">Idea Type</span></label>
+        <div class="idea-types">
+          <div class="idea-type sel" onclick="selIdeaType(this)"><div class="idea-type-icon">💬</div><div class="idea-type-label fa-txt">شعار</div><div class="idea-type-label en-txt hidden">Slogan</div></div>
+          <div class="idea-type" onclick="selIdeaType(this)"><div class="idea-type-icon">🎬</div><div class="idea-type-label fa-txt">سناریو</div><div class="idea-type-label en-txt hidden">Scenario</div></div>
+          <div class="idea-type" onclick="selIdeaType(this)"><div class="idea-type-icon">🎯</div><div class="idea-type-label fa-txt">استراتژی</div><div class="idea-type-label en-txt hidden">Strategy</div></div>
+          <div class="idea-type" onclick="selIdeaType(this)"><div class="idea-type-icon">🎨</div><div class="idea-type-label fa-txt">بصری</div><div class="idea-type-label en-txt hidden">Visual</div></div>
+          <div class="idea-type" onclick="selIdeaType(this)"><div class="idea-type-icon">📝</div><div class="idea-type-label fa-txt">کپی</div><div class="idea-type-label en-txt hidden">Copy</div></div>
+          <div class="idea-type" onclick="selIdeaType(this)"><div class="idea-type-icon">💡</div><div class="idea-type-label fa-txt">سایر</div><div class="idea-type-label en-txt hidden">Other</div></div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-top"><label><span>*</span><span class="fa-txt">عنوان ایده</span><span class="en-txt hidden">Idea Title</span></label><span class="char-count" id="it-count">۰/۸۰</span></div>
+        <input type="text" id="idea-title" maxlength="80" oninput="updateScore()" placeholder="ایده را در یک جمله خلاصه کنید...">
+      </div>
+      <div class="field">
+        <div class="field-top"><label><span>*</span><span class="fa-txt">توضیح ایده</span><span class="en-txt hidden">Idea Description</span></label><span class="char-count" id="ib-count">۰/۱۰۰۰</span></div>
+        <textarea id="idea-body" maxlength="1000" style="min-height:140px" oninput="updateScore()" placeholder="چرا این ایده کار می‌کند؟ چه احساسی منتقل می‌کند؟"></textarea>
+      </div>
+
+      <div class="score-wrap">
+        <div class="score-label fa-txt">قدرت ایده شما</div>
+        <div class="score-label en-txt hidden">Idea Strength</div>
+        <div class="score-bar-bg"><div class="score-bar-fill" id="score-bar"></div></div>
+        <div class="score-tips">
+          <div class="score-tip" id="tip1"><span class="fa-txt">عنوان وارد شده</span><span class="en-txt hidden">Title entered</span></div>
+          <div class="score-tip" id="tip2"><span class="fa-txt">توضیح کامل</span><span class="en-txt hidden">Full description</span></div>
+          <div class="score-tip" id="tip3"><span class="fa-txt">نوع انتخاب شده</span><span class="en-txt hidden">Type selected</span></div>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field"><label><span>*</span><span class="fa-txt">نام شما</span><span class="en-txt hidden">Your Name</span></label><input type="text"></div>
+        <div class="field"><label><span class="fa-txt">شماره تماس</span><span class="en-txt hidden">Phone</span></label><input type="tel" style="direction:ltr;text-align:right"></div>
+      </div>
+
+      <div class="idea-submit-row">
+        <button class="btn-submit-idea" onclick="submitIdea()"><span class="fa-txt">ارسال ایده 💡</span><span class="en-txt hidden">Submit Idea 💡</span></button>
+        <button class="btn-cancel" onclick="document.getElementById('idea-form-layout').style.display='none'"><span class="fa-txt">انصراف</span><span class="en-txt hidden">Cancel</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WINNERS -->
+  <div class="winners-section">
+    <div class="sec-label fa-txt">ایده‌های برنده — کمپین‌های قبلی</div>
+    <div class="sec-label en-txt hidden">Winning Ideas — Previous Campaigns</div>
+    <div class="winners-grid">
+      <div class="winner-card">
+        <div class="winner-badge fa-txt">🥇 برنده</div>
+        <div class="winner-brand">اسنپ · کمپین زمستان ۱۴۰۲</div>
+        <div class="winner-idea fa-txt">«سفر گرمت رو شروع کن»</div>
+        <div class="winner-idea en-txt hidden">"Start your warm journey"</div>
+        <div class="winner-body fa-txt">این شعار ترکیب هوشمندانه‌ای از «گرمای سفر» و «فوریت سرما» بود. برند آن را در کمپین زمستانی‌اش استفاده کرد و نرخ کلیک ۳۴٪ بالاتر از کمپین قبلی بود.</div>
+        <div class="winner-body en-txt hidden">A clever combination of "journey warmth" and "cold urgency." The brand used it in their winter campaign with 34% higher CTR.</div>
+        <div class="winner-footer"><div class="winner-prize">🏆 ۲۰ میلیون تومان</div><div class="winner-name fa-txt">نیلوفر م.</div></div>
+      </div>
+      <div class="winner-card">
+        <div class="winner-badge fa-txt">🥇 برنده</div>
+        <div class="winner-brand">دیجی‌کالا · کمپین ۱۱/۱۱</div>
+        <div class="winner-idea fa-txt">«یازده دقیقه که کافیه»</div>
+        <div class="winner-idea en-txt hidden">"Eleven minutes is enough"</div>
+        <div class="winner-body fa-txt">ایده‌ای که روی سرعت خرید تأکید داشت. در عرض ۱۱ دقیقه می‌توانی سبدت را پر کنی. سادگی این شعار آن را برنده کرد.</div>
+        <div class="winner-body en-txt hidden">An idea emphasizing shopping speed. In just 11 minutes you can fill your cart. The simplicity of this slogan won it.</div>
+        <div class="winner-footer"><div class="winner-prize">🏆 ۳۵ میلیون تومان</div><div class="winner-name fa-txt">امیر ک.</div></div>
+      </div>
+      <div class="winner-card">
+        <div class="winner-badge fa-txt">🥇 برنده</div>
+        <div class="winner-brand">آپ · کمپین ولنتاین ۱۴۰۳</div>
+        <div class="winner-idea fa-txt">سناریو: «اولین پرداخت مشترک»</div>
+        <div class="winner-idea en-txt hidden">Scenario: "First shared payment"</div>
+        <div class="winner-body fa-txt">یک ویدیو ۳۰ ثانیه‌ای درباره دو نفر که اولین خرید مشترکشان را با آپ انجام می‌دهند. ایده ساده، اجرای احساسی.</div>
+        <div class="winner-body en-txt hidden">A 30-second video about two people making their first shared purchase with App. Simple idea, emotional execution.</div>
+        <div class="winner-footer"><div class="winner-prize">🏆 ۳۰ میلیون تومان</div><div class="winner-name fa-txt">سارا ا.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <footer><div class="f-logo">IdeaBazar</div><div class="f-note fa-txt">هر کسی می‌تواند ایده بدهد — بدون نیاز به مدرک یا سابقه</div><div class="f-note en-txt hidden">Anyone can submit ideas — no degree or experience needed</div></footer>
+</div>
+
+<!-- ════ DASHBOARD PAGE ════ -->
+<div class="page" id="page-dashboard">
+  <div class="dash-layout">
+    <div class="dash-sidebar">
+      <div class="dci"><div class="dci-l">کمپین فعال</div><div class="dci-n fa-txt">شعار بلک‌فرایدی</div><div class="dci-b">دیجیکالا · ۸ روز</div></div>
+      <div class="dash-nav">
+        <div class="dash-ni active" onclick="showDashTab('ideas',this)"><span>💡</span><span class="fa-txt">همه ایده‌ها</span><span class="en-txt hidden">All Ideas</span><span class="dash-ni-badge">۱۴۷</span></div>
+        <div class="dash-ni" onclick="showDashTab('shortlist',this)"><span>⭐</span><span class="fa-txt">شورت‌لیست</span><span class="en-txt hidden">Shortlist</span><span class="dash-ni-badge" id="sl-count">۰</span></div>
+        <div class="dash-ni" onclick="showDashTab('analytics',this)"><span>📊</span><span class="fa-txt">آنالیتیکس</span><span class="en-txt hidden">Analytics</span></div>
+        <div class="dash-ni" onclick="showPage('brand')"><span>➕</span><span class="fa-txt">کمپین جدید</span><span class="en-txt hidden">New Campaign</span></div>
+      </div>
+    </div>
+    <div class="dash-main">
+      <div class="metrics-row">
+        <div class="metric"><div class="metric-l fa-txt">ایده دریافتی</div><div class="metric-v">۱۴۷</div><div class="metric-d">↑ ۲۳ امروز</div></div>
+        <div class="metric"><div class="metric-l fa-txt">شورت‌لیست</div><div class="metric-v" id="sl-metric">۰</div><div class="metric-d" style="color:var(--text3)">از ۱۴۷</div></div>
+        <div class="metric"><div class="metric-l fa-txt">کیفیت میانگین</div><div class="metric-v">۷.۲</div><div class="metric-d">↑ بالاتر از میانگین</div></div>
+        <div class="metric"><div class="metric-l fa-txt">روز مانده</div><div class="metric-v">۸</div><div class="metric-d" style="color:var(--text3)">از ۲۱ روز</div></div>
+      </div>
+
+      <div id="tab-ideas">
+        <div class="table-hdr">
+          <div class="table-title fa-txt">ایده‌های دریافتی</div>
+          <div class="filter-row">
+            <button class="fbtn active" onclick="filterIdeas('all',this)"><span class="fa-txt">همه</span></button>
+            <button class="fbtn" onclick="filterIdeas('شعار',this)"><span class="fa-txt">شعار</span></button>
+            <button class="fbtn" onclick="filterIdeas('سناریو',this)"><span class="fa-txt">سناریو</span></button>
+            <button class="fbtn" onclick="filterIdeas('استراتژی',this)"><span class="fa-txt">استراتژی</span></button>
+          </div>
+        </div>
+        <div class="ideas-list" id="ideas-list"></div>
+      </div>
+
+      <div id="tab-shortlist" style="display:none">
+        <div class="table-hdr"><div class="table-title fa-txt">شورت‌لیست من</div></div>
+        <div id="sl-container"><div style="text-align:center;padding:60px 20px;color:var(--text3);font-size:13px" class="fa-txt">هنوز ایده‌ای به شورت‌لیست اضافه نشده</div></div>
+      </div>
+
+      <div id="tab-analytics" style="display:none">
+        <div class="table-hdr"><div class="table-title fa-txt">آنالیتیکس کمپین</div></div>
+        <div class="metrics-row" style="margin-bottom:16px">
+          <div class="metric" style="grid-column:span 2"><div class="metric-l fa-txt">توزیع نوع ایده‌ها</div>
+            <div style="display:flex;height:6px;margin-top:14px;overflow:hidden"><div style="flex:4;background:var(--gold)"></div><div style="flex:3;background:var(--blue)"></div><div style="flex:2;background:var(--red)"></div><div style="flex:1;background:var(--green)"></div></div>
+            <div style="display:flex;gap:16px;margin-top:10px;flex-wrap:wrap">
+              <span style="font-size:11px;color:var(--text2)"><span style="color:var(--gold)">●</span> شعار ۴۲٪</span>
+              <span style="font-size:11px;color:var(--text2)"><span style="color:var(--blue)">●</span> سناریو ۳۱٪</span>
+              <span style="font-size:11px;color:var(--text2)"><span style="color:var(--red)">●</span> استراتژی ۱۸٪</span>
+              <span style="font-size:11px;color:var(--text2)"><span style="color:var(--green)">●</span> سایر ۹٪</span>
+            </div>
+          </div>
+          <div class="metric" style="grid-column:span 2"><div class="metric-l fa-txt">روند دریافت ایده</div>
+            <div style="display:flex;align-items:flex-end;gap:4px;height:50px;margin-top:14px">
+              <div style="flex:1;background:var(--border2);height:30%"></div><div style="flex:1;background:var(--border2);height:45%"></div><div style="flex:1;background:var(--border2);height:60%"></div><div style="flex:1;background:var(--gold);height:80%"></div><div style="flex:1;background:var(--gold);height:100%"></div><div style="flex:1;background:var(--gold);height:90%"></div><div style="flex:1;background:var(--border2);height:70%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-panel" id="detail-panel">
+    <button class="dp-close" onclick="closeDetail()">← <span class="fa-txt">بستن</span></button>
+    <div class="dp-type" id="dp-type">شعار</div>
+    <div class="dp-title" id="dp-title"></div>
+    <div class="dp-body" id="dp-body"></div>
+    <div class="dp-div"></div>
+    <div class="dp-row"><span class="dp-key fa-txt">فرستنده</span><span class="dp-val" id="dp-sender"></span></div>
+    <div class="dp-row"><span class="dp-key fa-txt">زمان</span><span class="dp-val" id="dp-time"></span></div>
+    <div class="dp-row"><span class="dp-key fa-txt">امتیاز</span><span class="dp-val" id="dp-score"></span></div>
+    <div class="dp-actions">
+      <button class="btn-sl-lg" onclick="slFromDetail()"><span class="fa-txt">★ شورت‌لیست</span></button>
+      <button class="btn-rj-lg" onclick="closeDetail()"><span class="fa-txt">رد کردن</span></button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───
+const ideas = [
+  {id:1,title:'«امسال، ارزون‌تر از همیشه»',body:'این شعار با "امسال" حس فوریت ایجاد می‌کند. "ارزون‌تر از همیشه" قوی‌ترین ادعا در بلک‌فرایدی است. کوتاه، مستقیم، و به‌یادماندنی.',type:'شعار',votes:89,sender:'محمد ر.',time:'۳ ساعت پیش',score:'۸.۹/۱۰',sl:false,rj:false},
+  {id:2,title:'«وقتشه» — سه کلمه که همه چیز را می‌گوید',body:'"وقتشه" احساس انتظار را به لحظه عمل تبدیل می‌کند. می‌توان با موزیک ریتمیک و تصاویر سریع اجرا کرد.',type:'شعار',votes:74,sender:'سارا ا.',time:'۵ ساعت پیش',score:'۸.۴/۱۰',sl:false,rj:false},
+  {id:3,title:'سناریو: «آدم‌های واقعی» در بلک‌فرایدی',body:'۵ مشتری واقعی دیجیکالا، هر کدام ۵ ثانیه. می‌گویند چرا منتظر این روز بودند. آخر همه: "ما دیجیکالایی‌ها بلک‌فرایدی رو جدی می‌گیریم".',type:'سناریو',votes:61,sender:'علی ک.',time:'۷ ساعت پیش',score:'۷.۸/۱۰',sl:false,rj:false},
+  {id:4,title:'«قیمت‌ها خوابیدن، تو بیدار باش»',body:'کنتراست جذاب. "خوابیدن" استعاره پایین آمدن قیمت. "بیدار باش" حس فوریت ایجاد می‌کند.',type:'شعار',votes:55,sender:'نیلوفر م.',time:'۱۰ ساعت پیش',score:'۷.۵/۱۰',sl:false,rj:false},
+  {id:5,title:'استراتژی: «ساعت شمار» برای هر محصول',body:'هر محصول یک تایمر دیجیتال داشته باشد. FOMO شدیدی ایجاد می‌کند. با پوش‌نوتیفیکیشن ترکیب کن.',type:'استراتژی',votes:48,sender:'امیر ح.',time:'دیروز',score:'۷.۱/۱۰',sl:false,rj:false},
+  {id:6,title:'«یه بار در سال، حق داری»',body:'به مشتری اجازه می‌دهد. "حق داری" قدرتمند است — در بازاری که مردم نگران هزینه‌اند.',type:'شعار',votes:42,sender:'فاطمه ز.',time:'دیروز',score:'۶.۹/۱۰',sl:false,rj:false},
+];
+
+const campData = {
+  digikala:{logo:'د',bname:'دیجیکالا',cat:'فروشگاه آنلاین',title:'شعار تبلیغاتی برای کمپین بلک‌فرایدی ۱۴۰۴',desc:'یک شعار کوتاه، به‌یادماندنی و احساسی برای بزرگ‌ترین حراجی سال.',prize:'۳۵ میلیون تومان',time:'۸ روز',count:'۱۴۷ ایده'},
+  snapfood:{logo:'ا',bname:'اسنپ‌فود',cat:'تکنولوژی / غذا',title:'سناریو ویدیو تبلیغاتی ۳۰ ثانیه',desc:'داستانی که نشان دهد اسنپ‌فود فقط غذا نمی‌آورد.',prize:'۵۰ میلیون تومان',time:'۱۵ روز',count:'۸۹ ایده'},
+  hamrah:{logo:'ه',bname:'همراه اول',cat:'مخابرات',title:'کمپین برای جوانان ۱۸ تا ۲۵ ساله',desc:'می‌خواهیم نسل Z ایران را جذب کنیم.',prize:'۲۵ میلیون تومان',time:'۲۱ روز',count:'۲۳۴ ایده'},
+  tapsi:{logo:'ت',bname:'تپسی',cat:'حمل و نقل',title:'اسلوگان جدید برای ریبرندینگ',desc:'تپسی دارد تغییر می‌کند. اسلوگان جدیدی نیاز داریم.',prize:'۴۰ میلیون تومان',time:'۳۰ روز',count:'۵۶ ایده'},
+};
+
+let activeDetail = null;
+let shortlisted = [];
+let isEn = false;
+
+// ─── PAGES ───
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  window.scrollTo(0,0);
+  if(name==='dashboard') renderIdeas();
+}
+
+// ─── LANG ───
+function toggleLang(){
+  isEn = !isEn;
+  document.querySelector('.lang-btn').textContent = isEn ? 'فا' : 'EN';
+  document.documentElement.dir = isEn ? 'ltr' : 'rtl';
+  document.querySelectorAll('.fa-txt').forEach(el => el.classList.toggle('hidden', isEn));
+  document.querySelectorAll('.en-txt').forEach(el => el.classList.toggle('hidden', !isEn));
+}
+
+// ─── BRAND FORM ───
+function showBrandForm(show=true){
+  const s = document.getElementById('brand-form-section');
+  s.style.display = show ? 'block' : 'none';
+  if(show) s.scrollIntoView({behavior:'smooth'});
+}
+
+function goStep(n){
+  document.querySelectorAll('.form-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('fstep'+n).classList.add('active');
+  ['st1','st2','st3'].forEach((id,i)=>{
+    const el=document.getElementById(id);
+    el.classList.remove('active','done');
+    if(i+1===n) el.classList.add('active');
+    else if(i+1<n) el.classList.add('done');
+  });
+}
+
+function selPrize(el){document.querySelectorAll('.prize-opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel')}
+
+function countBrief(){
+  const v=document.getElementById('brief-input').value.length;
+  const c=document.getElementById('brief-count');
+  c.textContent=v+'/۵۰۰';
+  c.classList.toggle('warn',v>450);
+}
+
+function submitCampaign(){
+  document.querySelector('.reg-wrap').style.display='none';
+  document.getElementById('brand-success').classList.add('show');
+}
+
+function resetBrand(){
+  document.querySelector('.reg-wrap').style.display='block';
+  document.getElementById('brand-success').classList.remove('show');
+  goStep(1);
+}
+
+// ─── IDEA PAGE ───
+function openCamp(id){
+  const d = campData[id];
+  document.getElementById('cf-logo').textContent = d.logo;
+  document.getElementById('cf-bname').textContent = d.bname;
+  document.getElementById('cf-cat').textContent = d.cat;
+  document.getElementById('cf-title').textContent = d.title;
+  document.getElementById('cf-desc').textContent = d.desc;
+  document.getElementById('cf-prize').textContent = d.prize;
+  document.getElementById('cf-time').textContent = d.time;
+  document.getElementById('cf-count').textContent = d.count;
+  document.getElementById('idea-form-layout').style.display = 'grid';
+  document.getElementById('idea-form-layout').scrollIntoView({behavior:'smooth'});
+}
+
+function selIdeaType(el){document.querySelectorAll('.idea-type').forEach(t=>t.classList.remove('sel'));el.classList.add('sel');updateScore()}
+
+function updateScore(){
+  const title=document.getElementById('idea-title')?.value||'';
+  const body=document.getElementById('idea-body')?.value||'';
+  document.getElementById('it-count').textContent=title.length+'/۸۰';
+  document.getElementById('ib-count').textContent=body.length+'/۱۰۰۰';
+  let s=0;
+  const t1=document.getElementById('tip1'),t2=document.getElementById('tip2'),t3=document.getElementById('tip3');
+  if(title.length>5){s+=34;t1.classList.add('done')}else t1.classList.remove('done');
+  if(body.length>50){s+=33;t2.classList.add('done')}else t2.classList.remove('done');
+  if(document.querySelector('.idea-type.sel')){s+=33;t3.classList.add('done')}else t3.classList.remove('done');
+  document.getElementById('score-bar').style.width=s+'%';
+}
+
+function submitIdea(){
+  const t=document.getElementById('idea-title')?.value||'';
+  if(!t){alert('لطفاً عنوان ایده را وارد کنید');return}
+  alert('✅ ایده شما با موفقیت ارسال شد!');
+  document.getElementById('idea-form-layout').style.display='none';
+}
+
+// ─── DASHBOARD ───
+function renderIdeas(filter='all'){
+  const list=document.getElementById('ideas-list');
+  const filtered=filter==='all'?ideas:ideas.filter(i=>i.type===filter);
+  list.innerHTML=filtered.map((idea,idx)=>`
+    <div class="idea-row ${idea.sl?'sel':''} ${idea.rj?'hidden':''}" onclick="openDetail(${idea.id})">
+      <div class="rank ${idx<3?'top':''}">${idx+1}</div>
+      <div class="idea-content"><div class="idea-t">${idea.title}</div><div class="idea-p">${idea.body}</div></div>
+      <div class="type-badge">${idea.type}</div>
+      <div class="votes-col"><div class="votes-n">${idea.votes}</div><div class="votes-l">رای</div></div>
+      <div class="act-col" onclick="event.stopPropagation()">
+        <button class="btn-sl ${idea.sl?'active':''}" onclick="toggleSl(${idea.id})">${idea.sl?'★ شورت‌لیست':'☆ شورت‌لیست'}</button>
+        <button class="btn-rj" onclick="rejectIdea(${idea.id})">رد کردن</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterIdeas(type,btn){
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderIdeas(type);
+}
+
+function toggleSl(id){
+  const idea=ideas.find(i=>i.id===id);
+  idea.sl=!idea.sl;
+  shortlisted=ideas.filter(i=>i.sl);
+  updateSlCount();
+  renderIdeas();
+  renderSl();
+}
+
+function rejectIdea(id){ideas.find(i=>i.id===id).rj=true;renderIdeas()}
+
+function updateSlCount(){
+  const c=shortlisted.length;
+  document.getElementById('sl-count').textContent=c;
+  document.getElementById('sl-metric').textContent=c;
+}
+
+function renderSl(){
+  const c=document.getElementById('sl-container');
+  if(!shortlisted.length){c.innerHTML='<div style="text-align:center;padding:60px;color:var(--text3);font-size:13px">هنوز ایده‌ای به شورت‌لیست اضافه نشده</div>';return}
+  c.innerHTML='<div class="ideas-list">'+shortlisted.map((idea,idx)=>`
+    <div class="idea-row sel" onclick="openDetail(${idea.id})">
+      <div class="rank top">${idx+1}</div>
+      <div class="idea-content"><div class="idea-t">${idea.title}</div><div class="idea-p">${idea.body}</div></div>
+      <div class="type-badge">${idea.type}</div>
+      <div class="votes-col"><div class="votes-n">${idea.votes}</div><div class="votes-l">رای</div></div>
+      <div class="act-col" onclick="event.stopPropagation()"><button class="btn-sl active" onclick="toggleSl(${idea.id})">★ حذف</button></div>
+    </div>
+  `).join('')+'</div>';
+}
+
+function openDetail(id){
+  const idea=ideas.find(i=>i.id===id);
+  activeDetail=id;
+  document.getElementById('dp-type').textContent=idea.type;
+  document.getElementById('dp-title').textContent=idea.title;
+  document.getElementById('dp-body').textContent=idea.body;
+  document.getElementById('dp-sender').textContent=idea.sender;
+  document.getElementById('dp-time').textContent=idea.time;
+  document.getElementById('dp-score').textContent=idea.score;
+  document.getElementById('detail-panel').classList.add('show');
+}
+
+function closeDetail(){document.getElementById('detail-panel').classList.remove('show');activeDetail=null}
+function slFromDetail(){if(activeDetail)toggleSl(activeDetail);closeDetail()}
+
+function showDashTab(tab,btn){
+  ['ideas','shortlist','analytics'].forEach(t=>{
+    const el=document.getElementById('tab-'+t);
+    if(el) el.style.display=t===tab?'block':'none';
+  });
+  document.querySelectorAll('.dash-ni').forEach(i=>i.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+// ─── INIT ───
+renderIdeas();
+</script>
+</body>
+</html>
